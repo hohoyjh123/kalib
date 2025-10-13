@@ -5,7 +5,6 @@ import android.content.Intent
 import android.view.View
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.LinearInterpolator
-import androidx.biometric.BiometricPrompt
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.ConstsApp.IntentCode.Companion.PUSHDATA
@@ -26,21 +25,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.getViewModel
-import java.util.concurrent.Executor
 
 class IntroActivity: BaseAppBarActivity<ActivityIntroBinding>(R.layout.activity_intro) {
     private val pref: SecurePreference by inject()
-
-    private lateinit var biometricPrompt: BiometricPrompt
-    private lateinit var promptInfo: BiometricPrompt.PromptInfo
-    private lateinit var executor: Executor
 
     override fun onInitView() {
         binding.viewModel = getViewModel()
         binding.lifecycleOwner = this
         binding.viewModel?.saveFirebaseInstanceToken()
         startFadeInAnimation(binding.clFade)
-        startFlowerAnimation()
+//        startFlowerAnimation()
         binding.viewModel?.setShow(true)
     }
 

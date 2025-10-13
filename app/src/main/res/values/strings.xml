@@ -30,4 +30,6 @@
     <string name="push_setting_desc">광진구 문화행사 안내 알림을 받습니다.</string>
     <string name="shake_setting">흔들어열기 설정</string>
     <string name="shake_setting_desc">모바일 회원증을 흔들어서 엽니다</string>
+    <string name="intro_title">관악문화재단</string>
+    <string name="intro_desc">관악구통합도서관</string>
 </resources>

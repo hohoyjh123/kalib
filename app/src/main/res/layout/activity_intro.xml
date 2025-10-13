@@ -17,8 +17,10 @@
             android:id="@+id/clFade"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:alpha="0.0">
+            android:alpha="0.0"
+            tools:alpha="1">
             <ImageView
+                android:id="@+id/ivBottom"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -27,23 +29,46 @@
                 app:layout_constraintEnd_toEndOf="parent"/>
             <ImageView
                 android:id="@+id/ivFlower"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/check_on"
+                app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintVertical_bias="0.47"
-                app:layout_constraintHorizontal_bias="0.18"
+                app:layout_constraintEnd_toStartOf="@id/clTitle"
+                app:layout_constraintTop_toTopOf="@id/clTitle"
+                app:layout_constraintBottom_toBottomOf="@id/clTitle" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                app:layout_constraintVertical_bias="0.25"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
-            <ImageView
-                android:id="@+id/ivSlogan"
-                android:layout_width="320dp"
-                android:layout_height="70dp"
-                android:adjustViewBounds="true"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                app:layout_constraintStart_toEndOf="@id/ivFlower"
+                app:layout_constraintEnd_toEndOf="parent">
+                <TextView
+                    android:id="@+id/tvTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/style_regular"
+                    android:text="@string/intro_title"
+                    android:textSize="20dp"
+                    android:textColor="@color/color_E4007F"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <TextView
+                    android:id="@+id/tvDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:fontFamily="@font/style_bold"
+                    android:text="@string/intro_desc"
+                    android:textSize="30dp"
+                    android:textColor="@color/color_E4007F"
+                    app:layout_constraintTop_toBottomOf="@id/tvTitle"
+                    app:layout_constraintStart_toStartOf="parent"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
