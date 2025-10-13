@@ -1,9 +1,121 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.Galib" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/teal_200</item>
+        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+
     </style>
 
-    <style name="Theme.Galib" parent="Base.Theme.Galib" />
+    <style name="RippleEffectBorderless">
+        <item name="android:foreground">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <!-- Custom font style 일괄적용 -->
+    <style name="TextViewStyle" parent="@android:style/Widget.DeviceDefault.TextView">
+        <item name="android:fontFamily">@font/style_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="ButtonStyle" parent="@android:style/Widget.DeviceDefault.Button.Borderless">
+        <item name="android:fontFamily">@font/style_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="EditTextStyle" parent="@android:style/Widget.DeviceDefault.EditText">
+        <item name="android:fontFamily">@font/style_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="RadioButtonStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.RadioButton">
+        <item name="android:fontFamily">@font/style_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <style name="CheckboxStyle" parent="@android:style/Widget.DeviceDefault.CompoundButton.CheckBox">
+        <item name="android:fontFamily">@font/style_regular</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- Base Dialog -->
+    <style name="BaseDialog" parent="Theme.AppCompat.DayNight.Dialog">
+        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textAllCaps">false</item>
+
+        <!-- Default View Style -->
+        <item name="android:textViewStyle">@style/TextViewStyle</item>
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:editTextStyle">@style/EditTextStyle</item>
+        <item name="android:radioButtonStyle">@style/RadioButtonStyle</item>
+        <item name="android:checkboxStyle">@style/CheckboxStyle</item>
+    </style>
+
+    <style name="SubscribeDialog" parent="BaseDialog">
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 0.0 (투명) ~ 1.0 (검정색) 값을 가집니다 -->
+        <item name="android:backgroundDimAmount">0.7</item>
+    </style>
+
+    <style name="CommonOKButton" parent="@style/Widget.AppCompat.Button">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:textSize">16dp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:gravity">center</item>
+        <item name="android:text">@string/ok</item>
+        <item name="android:background">@null</item>
+        <item name="fontFamily">@font/style_bold</item>
+        <item name="android:foreground">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="CommonCancelButton" parent="CommonOKButton">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:text">@string/cancel</item>
+        <item name="fontFamily">@font/style_regular</item>
+    </style>
+
+    <style name="DefaultEditText" parent="@android:style/Widget.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">18dp</item>
+        <item name="android:textColorHint">@color/color_777777</item>
+        <item name="android:textColor">@color/color_555555</item>
+        <item name="android:background">@null</item>
+        <item name="fontFamily">@font/noto_sans_kr_medium</item>
+        <item name="android:textCursorDrawable">@drawable/edittext_cursor</item>
+    </style>
+
+    <style name="PwdEditText" parent="DefaultEditText">
+        <item name="android:inputType">textPassword</item>
+        <item name="android:hint">@string/pwd_input_hint</item>
+    </style>
+
+    <style name="LabelText">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">19dp</item>
+        <item name="android:textColor">@color/color_333333</item>
+        <item name="android:fontFamily">@font/style_bold</item>
+    </style>
+
+    <style name="DescText">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:textColor">@color/color_777777</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
+    </style>
 </resources>

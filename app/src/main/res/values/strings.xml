@@ -1,3 +1,33 @@
 <resources>
-    <string name="app_name">galib</string>
+    <string name="app_name">관악구립도서관</string>
+    <string name="noti_channel_id">ga_noti_channel_id</string>
+    <string name="retry">재시도</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
+    <string name="close">닫기</string>
+    <string name="setting">설정</string>
+    <string name="yes">네</string>
+    <string name="no">아니오</string>
+    <string name="pwd_input_hint">비밀번호 입력</string>
+    <string name="login_title">회원정보인증</string>
+    <string name="login_fail_error">로그인 정보가 올바르지 않거나 가입된 회원이 아닙니다</string>
+    <string name="login_success_msg">로그인 되었습니다.</string>
+    <string name="device_info_error">푸시키를 다시 확인하세요.</string>
+    <string name="qrcode_associate_member_error_msg">도서관대출회원만 이용 가능합니다</string>
+    <string name="available_after_logging_in">로그인 후 이용가능합니다.</string>
+    <string name="alarm">알림</string>
+    <string name="activity_finish_message">종료하시겠습니까?</string>
+    <string name="auto_login_fail_error">회원정보 변경 또는 네트워크가 원할하지 않아 로그아웃 되었습니다.\n로그인 후 이용해주세요.</string>
+    <string name="auto_login_biometric_check_error">자동로그인 또는 생체인증로그인 중 하나만 설정 가능합니다.</string>
+    <string name="login">로그인</string>
+    <string name="logout">로그아웃</string>
+    <string name="auto_login">자동로그인</string>
+    <string name="auto_login_desc">앱 실행시 자동으로 로그인 됩니다.</string>
+    <string name="force_update_message">관악구립도서관 앱이 업데이트 되었습니다. 원활한 사용을위해 앱을 업데이트해주세요.</string>
+    <string name="permission_notification">알림을 받으시려면\n우측 하단 [설정] 버튼을 누른 후,\n알림설정 권한을 허용해주세요!</string>
+    <string name="permission_location">위치 정보 제공을 받으시려면\n우측 하단 [설정] 버튼을 누른 후,\n위치 권한을 허용해주세요!</string>
+    <string name="push_setting">푸시알림 설정</string>
+    <string name="push_setting_desc">광진구 문화행사 안내 알림을 받습니다.</string>
+    <string name="shake_setting">흔들어열기 설정</string>
+    <string name="shake_setting_desc">모바일 회원증을 흔들어서 엽니다</string>
 </resources>

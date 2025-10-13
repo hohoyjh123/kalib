@@ -1,0 +1,217 @@
+package com.yesjnet.gwanak.ui.main
+
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import android.widget.TextView
+import android.widget.Toast
+import androidx.biometric.BiometricManager
+import androidx.databinding.BindingAdapter
+import com.jakewharton.rxbinding3.widget.checkedChanges
+import com.yesjnet.gwanak.BuildConfig
+import com.yesjnet.gwanak.R
+import com.yesjnet.gwanak.core.AppInfo
+import com.yesjnet.gwanak.core.ConstsData
+import com.yesjnet.gwanak.core.EnumApp
+import com.yesjnet.gwanak.core.UserInfo
+import com.yesjnet.gwanak.data.model.MemberInfo
+import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
+import com.yesjnet.gwanak.databinding.ActivitySettingBinding
+import com.yesjnet.gwanak.extension.bindSetDrawable
+import com.yesjnet.gwanak.extension.copyClipboard
+import com.yesjnet.gwanak.extension.getColorCompat
+import com.yesjnet.gwanak.extension.gone
+import com.yesjnet.gwanak.extension.show
+import com.yesjnet.gwanak.extension.showAlertConfirm
+import com.yesjnet.gwanak.extension.showAlertOK
+import com.yesjnet.gwanak.extension.showToast
+import com.yesjnet.gwanak.storage.SecurePreference
+import com.yesjnet.gwanak.ui.base.BaseAppBarActivity
+import com.yesjnet.gwanak.ui.base.BaseDialogFragment
+import com.yesjnet.gwanak.ui.startScreen
+import io.reactivex.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import java.util.concurrent.TimeUnit
+
+/**
+ * 설정 activity
+ */
+class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activity_setting) {
+    private val userInfo: UserInfo by inject()
+    private val appInfo: AppInfo by inject()
+    private val pref: SecurePreference by inject()
+
+    // 시스템 설정에서 돌아왔을 때 onActivityResult로 결과 확인
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+    }
+
+    override fun onInitView() {
+        binding.viewModel = getViewModel()
+        binding.lifecycleOwner = this
+        binding.activity = this
+        EventBus.getDefault().register(this)
+
+        initHeader(EnumApp.AppBarStyle.BACK_TITLE, getString(R.string.setting))
+    }
+
+    override fun onSubscribeUI() {
+        binding.viewModel?.apply {
+            onErrorResource.observe(this@SettingActivity) {
+                showAlertOK(message = it.message)
+            }
+            onNavScreen.observe(this@SettingActivity) {
+                startScreen(it)
+            }
+            onShowMsgDialog.observe(this@SettingActivity) {
+                showAlertOK(message = it)
+            }
+            onMemberInfo.observe(this@SettingActivity) {
+                val userId = it.userId
+                if (isLoginCheck(it)) {
+                    // fcm 표시
+                    if (BuildConfig.DEBUG) {
+                        binding.clFcm.gone()
+                    } else {
+                        binding.clFcm.gone()
+                    }
+                    binding.viewModel?.postPushKeyInfo(userId)
+                } else {
+                    CoroutineScope(Dispatchers.Main).launch {
+                        delay(696)
+                        binding.viewModel?.updateIsChangeReady(true)
+                    }
+                }
+            }
+            onCopyFcmToken.observe(this@SettingActivity) {
+                copyClipboard("label", it)
+                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+                    showToast("복사 성공")
+                }
+            }
+        }
+
+        // 자동 로그인
+        addToDisposable(binding.icAutoLogin.swcSwitch.checkedChanges()
+            .debounce(100, TimeUnit.MILLISECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                if (binding.viewModel?.getIsChangeReady() == true) {
+                    if (isLoginCheck(binding.viewModel?.onMemberInfo?.value)) {
+                        pref.setConfigBool(ConstsData.PrefCode.AUTO_LOGIN, it)
+                    } else {
+                        // 로그인 전
+                        if (it) {
+                            binding.icAutoLogin.swcSwitch.isChecked = false
+                        } else {
+                            showAlertOK(message = getString(R.string.available_after_logging_in))
+                        }
+                    }
+                }
+
+            })
+
+        // 푸시알림 설정
+        addToDisposable(binding.icPushSetting.swcSwitch.checkedChanges()
+            .debounce(100, TimeUnit.MILLISECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                if (binding.viewModel?.getIsChangeReady() == true) {
+                    val userId = appInfo.getLoginInfo()?.userId ?: ""
+                    if (isLoginCheck(binding.viewModel?.onMemberInfo?.value)) {
+                        binding.viewModel?.postUpdatePushKey(userId = userId, switch1 = EnumApp.FlagYN.flagByBoolean(it))
+                    } else {
+                        // 로그인 전
+                        if (it) {
+                            binding.icPushSetting.swcSwitch.isChecked = false
+                        } else {
+                            showAlertOK(message = getString(R.string.available_after_logging_in))
+                        }
+                    }
+                }
+
+            })
+
+        // 흔들어열기 설정
+        addToDisposable(binding.icShakeSetting.swcSwitch.checkedChanges()
+            .debounce(100, TimeUnit.MILLISECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe {
+                if (binding.viewModel?.getIsChangeReady() == true) {
+                    if (isLoginCheck(binding.viewModel?.onMemberInfo?.value)) {
+                        pref.setConfigBool(ConstsData.PrefCode.SHAKE_FLAG, it)
+                    } else {
+                        // 로그인 전
+                        if (it) {
+                            binding.icShakeSetting.swcSwitch.isChecked = false
+                        } else {
+                            showAlertOK(message = getString(R.string.available_after_logging_in))
+                        }
+                    }
+                }
+            })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.viewModel?.onFcmToken?.postValue(appInfo.getFCMDeviceToken())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        EventBus.getDefault().unregister(this)
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEventMemberInfo(event: EBMemberInfo) {
+        if (event.memberInfo.userId.isNullOrEmpty()) {
+            binding.viewModel?.updateMemberInfo(MemberInfo())
+        } else {
+            binding.viewModel?.updateMemberInfo(event.memberInfo)
+        }
+        finish()
+    }
+
+    companion object {
+
+
+        @BindingAdapter("bindLoginUi")
+        @JvmStatic
+        fun TextView.bindLoginUi(memberInfo: MemberInfo?) {
+            memberInfo?.let {
+                if (it.userId.isNullOrEmpty()) {
+                    text = this.context.getString(R.string.login)
+                    setTextColor(this.context.getColorCompat(R.color.white))
+                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.color_3A3DAA), cornerAll = 3)
+                } else {
+                    text = this.context.getString(R.string.logout)
+                    setTextColor(this.context.getColorCompat(R.color.color_777777))
+                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.white), cornerAll = 3, stroke = 1, strokeColor = this.context.getColorCompat(R.color.color_CCCCCC))
+                }
+            } ?: run {
+                text = this.context.getString(R.string.login)
+                setTextColor(this.context.getColorCompat(R.color.white))
+                this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.color_3A3DAA), cornerAll = 3)
+            }
+        }
+
+        @BindingAdapter("bindVersion")
+        @JvmStatic
+        fun TextView.bindVersion(version: String?) {
+            version?.let { this.text = version }
+        }
+    }
+
+}
