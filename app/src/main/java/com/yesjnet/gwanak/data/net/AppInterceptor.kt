@@ -4,7 +4,7 @@ import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.core.AppInfo
 import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.ConstsData.Companion.TAG_NET
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import okhttp3.Interceptor
 import okhttp3.Response
 import okhttp3.ResponseBody
@@ -14,7 +14,7 @@ import org.koin.core.component.inject
 /**
  * app interceptor
  */
-class AppInterceptor(private val mApplication: KJApplication) : Interceptor , KoinComponent {
+class AppInterceptor(private val mApplication: GAApplication) : Interceptor , KoinComponent {
 
     private val mAppInfo: AppInfo by inject()
 

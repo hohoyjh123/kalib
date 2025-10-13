@@ -7,7 +7,7 @@ import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.normal.TedPermission
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 
 object PermissionUtil {
 
@@ -25,9 +25,9 @@ object PermissionUtil {
                     Logger.d("jihoon onPermissionDenied")
                 }
             })
-            .setDeniedMessage(KJApplication.app.getString(R.string.permission_notification))
-            .setDeniedCloseButtonText(KJApplication.app.getString(R.string.close))
-            .setGotoSettingButtonText(KJApplication.app.getString(R.string.setting))
+            .setDeniedMessage(GAApplication.app.getString(R.string.permission_notification))
+            .setDeniedCloseButtonText(GAApplication.app.getString(R.string.close))
+            .setGotoSettingButtonText(GAApplication.app.getString(R.string.setting))
             .setPermissions(Manifest.permission.POST_NOTIFICATIONS)
             .check()
     }
@@ -46,9 +46,9 @@ object PermissionUtil {
                     Logger.d("jihoon onPermissionDenied")
                 }
             })
-            .setDeniedMessage(KJApplication.app.getString(R.string.permission_location))
-            .setDeniedCloseButtonText(KJApplication.app.getString(R.string.close))
-            .setGotoSettingButtonText(KJApplication.app.getString(R.string.setting))
+            .setDeniedMessage(GAApplication.app.getString(R.string.permission_location))
+            .setDeniedCloseButtonText(GAApplication.app.getString(R.string.close))
+            .setGotoSettingButtonText(GAApplication.app.getString(R.string.setting))
             .setPermissions(*permissions)
             .check()
     }

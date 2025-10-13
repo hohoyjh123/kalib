@@ -15,21 +15,21 @@ interface EtcAPI {
 
     // 앱 버전 체크
     @FormUrlEncoded
-    @POST("mobile2/api/appVersionCheck.do")
+    @POST("mobile/api/appVersionCheck.do")
     fun postAppVersionCheck(@FieldMap params: MutableMap<String, String>): Call<AppVersionItem>
 
     // 회원별 설정조회
     @FormUrlEncoded
-    @POST("mobile2/api/pushkeyInfo.do")
+    @POST("mobile/api/pushkeyInfo.do")
     fun postPushKeyInfo(@FieldMap params: MutableMap<String, String>): Call<PushInfo>
 
     // 디바이스 정보저장
     @FormUrlEncoded
-    @POST("mobile2/api/pushkey.do")
+    @POST("mobile/api/pushkey.do")
     fun postPushKey(@FieldMap params: MutableMap<String, String>): Call<DeviceInfo>
 
     // 알림설정
     @FormUrlEncoded
-    @POST("mobile2/api/updatePushkey.do")
+    @POST("mobile/api/updatePushkey.do")
     fun postUpdatePushKey(@FieldMap params: MutableMap<String, String>): Call<DeviceInfo>
 }

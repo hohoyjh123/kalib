@@ -21,7 +21,7 @@ import java.util.Locale
  *  앱정보 유저정보 싱글톤 클래스
  */
 
-class AppInfo(private val application: KJApplication, private val mSecPref: SecurePreference) {
+class AppInfo(private val application: GAApplication, private val mSecPref: SecurePreference) {
 
     val appName: String by lazy {
         "kjlib"
@@ -153,7 +153,7 @@ class AppInfo(private val application: KJApplication, private val mSecPref: Secu
 }
 
 class UserInfo(
-    private val application: KJApplication,
+    private val application: GAApplication,
     private val mSecPref: SecurePreference,
     private val appInfo: AppInfo,
 ) {

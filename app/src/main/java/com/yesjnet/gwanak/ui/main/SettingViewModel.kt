@@ -1,23 +1,17 @@
 package com.yesjnet.gwanak.ui.main
 
-import android.os.Build
 import android.webkit.CookieManager
 import androidx.lifecycle.MutableLiveData
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.BuildConfig
-import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
 import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.DeviceInfo
-import com.yesjnet.gwanak.data.model.Family
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.PushInfo
-import com.yesjnet.gwanak.data.model.eventbus.EBLogout
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.data.net.APIResource
 import com.yesjnet.gwanak.data.net.APIResult
@@ -25,14 +19,11 @@ import com.yesjnet.gwanak.data.net.ErrorResource
 import com.yesjnet.gwanak.data.net.Response
 import com.yesjnet.gwanak.data.repository.EtcRepository
 import com.yesjnet.gwanak.data.repository.MemberRepository
-import com.yesjnet.gwanak.extension.browse
 import com.yesjnet.gwanak.lifecycle.MultipleLiveEvent
 import com.yesjnet.gwanak.storage.SecurePreference
 import com.yesjnet.gwanak.ui.NavScreen
 import com.yesjnet.gwanak.ui.ScreenInfo
 import com.yesjnet.gwanak.ui.base.BaseViewModel
-import com.yesjnet.gwanak.ui.startScreen
-import com.yesjnet.gwanak.util.PermissionUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -44,7 +35,7 @@ import org.greenrobot.eventbus.EventBus
  */
 
 class SettingViewModel(
-    private val application: KJApplication,
+    private val application: GAApplication,
     private val etcRepo: EtcRepository,
     private val memberRepo: MemberRepository,
     val userInfo: UserInfo,

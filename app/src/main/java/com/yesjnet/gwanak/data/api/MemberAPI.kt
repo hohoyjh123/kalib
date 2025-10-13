@@ -14,11 +14,11 @@ interface MemberAPI {
 
     // 로그인
     @FormUrlEncoded
-    @POST("mobile2/api/appLogin.do")
+    @POST("mobile/api/appLogin.do")
     fun postAppLogin(@FieldMap params: MutableMap<String, String>): Call<MemberInfo>
 
     // 로그아웃
     @FormUrlEncoded
-    @POST("mobile2/api/appLogout.do")
+    @POST("mobile/api/appLogout.do")
     fun postAppLogout(@FieldMap params: MutableMap<String, String>): Call<DeviceInfo>
 }

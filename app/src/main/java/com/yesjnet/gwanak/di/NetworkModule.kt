@@ -2,7 +2,7 @@ package com.yesjnet.gwanak.di
 
 import com.google.gson.GsonBuilder
 import com.yesjnet.gwanak.core.ConstsData
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.data.api.EnumConverterFactory
 import com.yesjnet.gwanak.data.net.AppInterceptor
 import com.yesjnet.gwanak.data.net.NetInterceptor
@@ -58,7 +58,7 @@ val networkModule = module {
             .build()
     }
 
-    single { AppInterceptor(androidApplication() as KJApplication) }
+    single { AppInterceptor(androidApplication() as GAApplication) }
     single { NetInterceptor() }
 //    single(named("tokenAthenticator")) { TokenAuthenticator() }
 

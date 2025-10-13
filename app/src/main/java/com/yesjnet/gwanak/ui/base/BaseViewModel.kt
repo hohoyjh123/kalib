@@ -2,7 +2,7 @@ package com.yesjnet.gwanak.ui.base
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.data.net.ErrorResource
 import com.yesjnet.gwanak.lifecycle.MultipleLiveEvent
 import com.yesjnet.gwanak.lifecycle.SingleLiveEvent
@@ -16,7 +16,7 @@ import io.reactivex.disposables.Disposable
  *
  * @param application
  */
-open class BaseViewModel(application: KJApplication) : AndroidViewModel(application) {
+open class BaseViewModel(application: GAApplication) : AndroidViewModel(application) {
 
     // swipe refresh 로딩바
     val onDataLoading: MultipleLiveEvent<Boolean>

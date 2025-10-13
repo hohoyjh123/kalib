@@ -134,10 +134,10 @@ class EnumApp {
      * 웹뷰 타입
      */
     enum class WebType(val webViewUrl: String) {
-        HOME("/mobile2/index.do"), // 메인 하단메뉴 > 홈으로
-        BOOK_SEARCH("/mobile2/search/plusSearchSimple.do"), // 메인 하단메뉴 > 도서검색
-        LOAN_STATUS("/mobile2/mylib/reservationStatusList.do"), // 메인 하단메뉴 > 대출예약현황
-        BOOK_INTEREST("/mobile2/mylib/basketList.do"); // 메인 하단메뉴 > 관심도서
+        HOME("/mobile/index.do"), // 메인 하단메뉴 > 홈으로
+        BOOK_SEARCH("/mobile/search/plusSearchSimple.do"), // 메인 하단메뉴 > 도서검색
+        LOAN_STATUS("/mobile/mylib/reservationStatusList.do"), // 메인 하단메뉴 > 대출예약현황
+        BOOK_INTEREST("/mobile/mylib/basketList.do"); // 메인 하단메뉴 > 관심도서
     }
     enum class WebScheme(val scheme: String) {
         OPEN_LOGIN("kr.co.jnet.gjlib://openLogin"),

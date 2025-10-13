@@ -3,7 +3,6 @@ package com.yesjnet.gwanak.fcm
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.os.Build
 import androidx.core.app.NotificationCompat
@@ -11,13 +10,12 @@ import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
 import com.yesjnet.gwanak.core.ConstsApp
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.PushData
 import com.yesjnet.gwanak.extension.getColorCompat
 import com.yesjnet.gwanak.storage.SecurePreference
 import com.yesjnet.gwanak.ui.IntroActivity
-import com.yesjnet.gwanak.ui.main.MainActivity
 import me.leolin.shortcutbadger.ShortcutBadger
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -25,7 +23,7 @@ import org.koin.core.component.inject
  * 알림 매니저
  */
 class LocalNotificationManager(
-    private val application: KJApplication,
+    private val application: GAApplication,
     private val mSecPref: SecurePreference
 ): KoinComponent {
 

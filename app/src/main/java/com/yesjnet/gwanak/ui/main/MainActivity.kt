@@ -269,7 +269,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
             Logger.d("jihoon push url null")
         } else {
             val memberInfo = binding.viewModel?.userInfo?.getMember()
-            val fullUrl = "${ConstsData.SERVER_URL_FULL}mobile2/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(url, "utf-8")}"
+            val fullUrl = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(url, "utf-8")}"
             binding.wv.loadUrl(fullUrl)
         }
     }
@@ -316,10 +316,10 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
     // webview start
     private fun setWebView(webType: EnumApp.WebType, memberInfo: MemberInfo? = null) {
         val url = when (webType) {
-            EnumApp.WebType.HOME -> "${ConstsData.SERVER_URL_FULL}mobile2/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-            EnumApp.WebType.BOOK_SEARCH -> "${ConstsData.SERVER_URL_FULL}mobile2/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-            EnumApp.WebType.LOAN_STATUS -> "${ConstsData.SERVER_URL_FULL}mobile2/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-            EnumApp.WebType.BOOK_INTEREST -> "${ConstsData.SERVER_URL_FULL}mobile2/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
+            EnumApp.WebType.HOME -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
+            EnumApp.WebType.BOOK_SEARCH -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
+            EnumApp.WebType.LOAN_STATUS -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
+            EnumApp.WebType.BOOK_INTEREST -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
         }
         binding.wv.loadUrl(url)
     }

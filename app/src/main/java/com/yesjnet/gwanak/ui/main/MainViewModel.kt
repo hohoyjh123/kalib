@@ -7,7 +7,7 @@ import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
 import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.DeviceInfo
 import com.yesjnet.gwanak.data.model.MemberInfo
@@ -19,12 +19,11 @@ import com.yesjnet.gwanak.data.net.Response
 import com.yesjnet.gwanak.data.repository.EtcRepository
 import com.yesjnet.gwanak.data.repository.MemberRepository
 import com.yesjnet.gwanak.storage.SecurePreference
-import com.yesjnet.gwanak.ui.NavScreen
 import com.yesjnet.gwanak.ui.base.BaseViewModel
 import org.greenrobot.eventbus.EventBus
 
 class MainViewModel(
-    private val application: KJApplication,
+    private val application: GAApplication,
     private val appInfo: AppInfo,
     private val etcRepo: EtcRepository,
     private val memberRepo: MemberRepository,

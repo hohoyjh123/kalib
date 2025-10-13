@@ -11,7 +11,7 @@ import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
 import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
-import com.yesjnet.gwanak.core.KJApplication
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.AppVersionItem
 import com.yesjnet.gwanak.data.model.DeviceInfo
@@ -33,7 +33,7 @@ import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 
 class IntroViewModel(
-    private val application: KJApplication,
+    private val application: GAApplication,
     private val etcRepo: EtcRepository,
     private val memberRepo: MemberRepository,
     val appInfo: AppInfo,

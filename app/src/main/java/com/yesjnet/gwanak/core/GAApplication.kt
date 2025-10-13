@@ -22,7 +22,7 @@ import org.koin.android.ext.koin.androidFileProperties
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
-class KJApplication : MultiDexApplication() {
+class GAApplication : MultiDexApplication() {
 
     override fun attachBaseContext(base: Context) {
         super.attachBaseContext(base)
@@ -44,7 +44,7 @@ class KJApplication : MultiDexApplication() {
                 utilModule
             )
             androidLogger()
-            androidContext(this@KJApplication)
+            androidContext(this@GAApplication)
             // load properties from assets/koin.properties file
             androidFileProperties()
         }
