@@ -25,6 +25,47 @@
     <string name="intro_title">관악문화재단</string>
     <string name="intro_desc">관악구통합도서관</string>
 
+    <!-- 전체 메뉴 -->
+    <string name="login_before_message">로그인이 필요한 서비스 입니다.</string>
+    <string name="login_after_message_format">%s 님, 반갑습니다</string>
+
+    <string name="data_search">자료검색</string>
+    <string name="integrated_resource_search">통합자료검색</string>
+    <string name="search_new_info">신착자료검색</string>
+    <string name="u_library_search">U-도서관검색</string>
+    <string name="smart_library_search">스마트도서관검색</string>
+    <string name="frequently_read_books">많이보는책</string>
+
+    <string name="user_guide">이용안내</string>
+    <string name="notice">공지사항</string>
+    <string name="facility_info">시설정보</string>
+
+    <string name="apply_participate">신청/참여</string>
+    <string name="reading_culture_program">독서문화프로그램</string>
+    <string name="request_desired_book">희망도서신청</string>
+    <string name="free_delivery">맘대로택배</string>
+    <string name="loan_from_local_bookstores">동네서점바로대출제</string>
+
+    <string name="electronic_library">전자도서관</string>
+    <string name="e_books">전자책</string>
+    <string name="audio_books">오디오북</string>
+
+    <string name="my_info">내정보</string>
+    <string name="book_usage_history">도서이용내역</string>
+    <string name="interlibrary_loan_request_history">상호대차신청내역</string>
+    <string name="my_books_of_interest">나의관심도서</string>
+    <string name="my_request_history">나의신청내역</string>
+    <string name="request_for_desired_books">희망도서신청내역</string>
+
+    <string name="membership_information">회원정보</string>
+    <string name="mobile_membership_card">모바일회원증</string>
+    <string name="edit_membership_information">회원정보수정</string>
+    <string name="change_password">비밀번호변경</string>
+    <string name="re_agree_personal_information">개인정보재동의</string>
+
+    <string name="settings">설정</string>
+    <string name="app_settings">앱설정</string>
+
     <!-- 회원정보인증 -->
     <string name="login_title">회원인증</string>
     <string name="login_desc_1">관악구립도서관 로그인 페이지 입니다.</string>

@@ -61,4 +61,6 @@
     <color name="color_F8F8F8">#F8F8F8</color>
     <color name="color_E4007F">#E4007F</color>
     <color name="color_FFF8FC">#FFF8FC</color>
+    <color name="color_111111">#111111</color>
+    <color name="color_dddddd">#dddddd</color>
 </resources>

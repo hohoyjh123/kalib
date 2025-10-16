@@ -156,7 +156,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                     }
                     EnumApp.MainPage.MENU -> {
 //                            binding.icMainBottom.mainTab5.isActivated = true
-                        startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+                        startScreen(NavScreen.AllMenu(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
                     }
                     else -> EnumApp.WebType.HOME
                 }

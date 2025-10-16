@@ -11,6 +11,7 @@ import com.yesjnet.gwanak.extension.slideTransitionStart
 import com.yesjnet.gwanak.extension.slideTransitionUpStart
 import com.yesjnet.gwanak.ui.base.BaseActivity
 import com.yesjnet.gwanak.ui.base.BaseFragment
+import com.yesjnet.gwanak.ui.main.AllMenuActivity
 import com.yesjnet.gwanak.ui.main.LoginActivity
 import com.yesjnet.gwanak.ui.main.MainActivity
 import com.yesjnet.gwanak.ui.main.SettingActivity
@@ -33,6 +34,7 @@ sealed class NavScreen<out T> {
     class Main<out T>(val screenInfo: T? = null) : NavScreen<T>()
     class Login<out T>(val screenInfo: T? = null) : NavScreen<T>()
     class Setting<out T>(val screenInfo: T? = null) : NavScreen<T>()
+    class AllMenu<out T>(val screenInfo: T? = null) : NavScreen<T>()
 
     // system 이동처리
     class SystemMove<out T>(val screenInfo: T? = null) : NavScreen<T>()
@@ -62,7 +64,7 @@ fun BaseActivity<*>.startScreen(navSc: NavScreen<ScreenInfo?>) {
         is NavScreen.Main -> startMainActivity(navSc.screenInfo)
         is NavScreen.Login -> startLoginActivity(navSc.screenInfo)
         is NavScreen.Setting -> startSettingActivity(navSc.screenInfo)
-
+        is NavScreen.AllMenu -> startAllMenuActivity(navSc.screenInfo)
         is NavScreen.SystemMove -> startSystemMove(navSc.screenInfo)
 
         else -> throw NavScreenNotDefiendException("Navigator UnDefined NavScreen !! ")
@@ -120,6 +122,10 @@ fun BaseActivity<*>.startLoginActivity(screenInfo: ScreenInfo?) {
 }
 fun BaseActivity<*>.startSettingActivity(screenInfo: ScreenInfo?) {
     val intent = Intent(this, SettingActivity::class.java)
+    startActivityCommon(intent,screenInfo)
+}
+fun BaseActivity<*>.startAllMenuActivity(screenInfo: ScreenInfo?) {
+    val intent = Intent(this, AllMenuActivity::class.java)
     startActivityCommon(intent,screenInfo)
 }
 

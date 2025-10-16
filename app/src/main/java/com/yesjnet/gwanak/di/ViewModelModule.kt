@@ -2,6 +2,7 @@ package com.yesjnet.gwanak.di
 
 import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.ui.IntroViewModel
+import com.yesjnet.gwanak.ui.main.AllMenuViewModel
 import com.yesjnet.gwanak.ui.main.LoginViewModel
 import com.yesjnet.gwanak.ui.main.MainViewModel
 import com.yesjnet.gwanak.ui.main.SettingViewModel
@@ -20,5 +21,6 @@ val viewModelModule = module {
     viewModel { MainViewModel(androidApplication() as GAApplication, get(), get(), get(), get(), get()) }
     viewModel { LoginViewModel(androidApplication() as GAApplication, get(), get(), get(), get(), get()) }
     viewModel { SettingViewModel(androidApplication() as GAApplication, get(), get(), get(), get(), get()) }
+    viewModel { AllMenuViewModel(androidApplication() as GAApplication, get(), get(), get()) }
 
 }
