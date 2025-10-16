@@ -156,46 +156,6 @@ class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activ
         EventBus.getDefault().unregister(this)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onEventMemberInfo(event: EBMemberInfo) {
-        if (event.memberInfo.userId.isNullOrEmpty()) {
-            binding.viewModel?.updateMemberInfo(MemberInfo())
-        } else {
-            binding.viewModel?.updateMemberInfo(event.memberInfo)
-        }
-        finish()
-    }
-
-    companion object {
-
-
-        @BindingAdapter("bindLoginUi")
-        @JvmStatic
-        fun TextView.bindLoginUi(memberInfo: MemberInfo?) {
-            memberInfo?.let {
-                if (it.userId.isNullOrEmpty()) {
-                    text = this.context.getString(R.string.login)
-                    setTextColor(this.context.getColorCompat(R.color.white))
-                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.color_3A3DAA), cornerAll = 3)
-                } else {
-                    text = this.context.getString(R.string.logout)
-                    setTextColor(this.context.getColorCompat(R.color.color_777777))
-                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.white), cornerAll = 3, stroke = 1, strokeColor = this.context.getColorCompat(R.color.color_CCCCCC))
-                }
-            } ?: run {
-                text = this.context.getString(R.string.login)
-                setTextColor(this.context.getColorCompat(R.color.white))
-                this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.color_3A3DAA), cornerAll = 3)
-            }
-        }
-
-        @BindingAdapter("bindVersion")
-        @JvmStatic
-        fun TextView.bindVersion(version: String?) {
-            version?.let { this.text = version }
-        }
-    }
-
     override fun onSingleClick(view: View) {
         when (view.id) {
             R.id.ivBanner -> {
@@ -244,6 +204,46 @@ class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activ
                     }
                 }
             }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEventMemberInfo(event: EBMemberInfo) {
+        if (event.memberInfo.userId.isNullOrEmpty()) {
+            binding.viewModel?.updateMemberInfo(MemberInfo())
+        } else {
+            binding.viewModel?.updateMemberInfo(event.memberInfo)
+        }
+        finish()
+    }
+
+    companion object {
+
+
+        @BindingAdapter("bindLoginUi")
+        @JvmStatic
+        fun TextView.bindLoginUi(memberInfo: MemberInfo?) {
+            memberInfo?.let {
+                if (it.userId.isNullOrEmpty()) {
+                    text = this.context.getString(R.string.login)
+                    setTextColor(this.context.getColorCompat(R.color.white))
+                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.primary_color), cornerAll = 3)
+                } else {
+                    text = this.context.getString(R.string.logout)
+                    setTextColor(this.context.getColorCompat(R.color.color_777777))
+                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.white), cornerAll = 3, stroke = 1, strokeColor = this.context.getColorCompat(R.color.color_CCCCCC))
+                }
+            } ?: run {
+                text = this.context.getString(R.string.login)
+                setTextColor(this.context.getColorCompat(R.color.white))
+                this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.primary_color), cornerAll = 3)
+            }
+        }
+
+        @BindingAdapter("bindVersion")
+        @JvmStatic
+        fun TextView.bindVersion(version: String?) {
+            version?.let { this.text = version }
         }
     }
 

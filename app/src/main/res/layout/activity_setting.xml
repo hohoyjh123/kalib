@@ -60,7 +60,7 @@
                     android:layout_marginEnd="20dp"
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="5dp"
-                    android:fontFamily="@font/style_bold"
+                    android:fontFamily="@font/noto_sans_kr_medium"
                     android:textSize="17dp"
                     rippleColor="@{@color/ripple_effect}"
                     android:onClick="@{() -> viewModel.onClickLoginCheck(viewModel.onMemberInfo)}"
