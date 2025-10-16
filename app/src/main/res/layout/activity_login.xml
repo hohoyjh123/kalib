@@ -48,6 +48,8 @@
                     android:layout_marginTop="20dp"
                     android:text="@={viewModel.onBindId}"
                     android:singleLine="true"
+                    android:hint="@string/id_input_hint"
+                    android:background="@drawable/edit_focus_list"
                     app:layout_constraintTop_toBottomOf="@id/tvDesc1"
                     style="@style/DefaultEditText"/>
 
