@@ -13,7 +13,7 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:background="@color/white"
             android:visibility="gone"
             android:clipToPadding="false"
@@ -22,7 +22,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clMain"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="55dp"
             android:background="@color/color_F1F3F5"
             android:clipToPadding="false"
             android:clipChildren="false"
@@ -31,7 +31,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clBack"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="55dp"
                 android:visibility="gone"
                 style="@style/RippleEffectBorderless"
                 app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +42,7 @@
                     android:id="@+id/ivBack"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/icon_back"
+                    android:src="@drawable/menu_left_arrow"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -56,7 +56,7 @@
                 android:id="@+id/tvToolbarTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textSize="19dp"
+                android:textSize="20dp"
                 android:textColor="@color/color_333333"
                 android:ellipsize="end"
                 android:gravity="center_horizontal"
@@ -70,13 +70,13 @@
 
             <!-- 오른쪽 닫기X -->
             <ImageView
-                android:visibility="gone"
                 android:id="@+id/ibtClose"
                 style="@style/RippleEffectBorderless"
                 android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_height="55dp"
                 android:layout_marginEnd="8dp"
                 android:src="@drawable/btn_popup_close"
+                android:visibility="gone"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

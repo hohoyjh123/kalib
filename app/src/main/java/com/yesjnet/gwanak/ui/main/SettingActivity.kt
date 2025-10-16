@@ -3,11 +3,13 @@ package com.yesjnet.gwanak.ui.main
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.biometric.BiometricManager
 import androidx.databinding.BindingAdapter
 import com.jakewharton.rxbinding3.widget.checkedChanges
+import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.BuildConfig
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
@@ -17,6 +19,7 @@ import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.databinding.ActivitySettingBinding
+import com.yesjnet.gwanak.extension.OnSingleClickListener
 import com.yesjnet.gwanak.extension.bindSetDrawable
 import com.yesjnet.gwanak.extension.copyClipboard
 import com.yesjnet.gwanak.extension.getColorCompat
@@ -44,7 +47,8 @@ import java.util.concurrent.TimeUnit
 /**
  * 설정 activity
  */
-class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activity_setting) {
+class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activity_setting),
+    OnSingleClickListener {
     private val userInfo: UserInfo by inject()
     private val appInfo: AppInfo by inject()
     private val pref: SecurePreference by inject()
@@ -211,6 +215,17 @@ class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activ
         @JvmStatic
         fun TextView.bindVersion(version: String?) {
             version?.let { this.text = version }
+        }
+    }
+
+    override fun onSingleClick(view: View) {
+        when (view.id) {
+            R.id.ivBanner -> {
+                Logger.d("ivbanner")
+            }
+            R.id.ivBarcode -> {
+                Logger.d("ivBarcode")
+            }
         }
     }
 

@@ -74,9 +74,9 @@ class EnumApp {
      */
     enum class AppBarComponent(val defaultResId:Int, val onResId:Int) {
         NONE(0,0),
-        BACK(R.drawable.icon_back,0),
+        BACK(R.drawable.menu_left_arrow,0),
         TEXT(0,0),
-        CLOSE(R.drawable.icon_back,0);
+        CLOSE(R.drawable.menu_left_arrow,0);
     }
 
     /**
@@ -87,9 +87,9 @@ class EnumApp {
     ) {
         HOME(0),
         BOOK_SEARCH(1),
-        MEMBERSHIP_CARD(2),
-        LOAN_STATUS(3),
-        BOOK_INTEREST(4);
+        MY_LIBRARY(2),
+        SETTING(3),
+        MENU(4);
 
         companion object {
             fun getPage(page: String): MainPage {
@@ -135,14 +135,13 @@ class EnumApp {
      */
     enum class WebType(val webViewUrl: String) {
         HOME("/mobile/index.do"), // 메인 하단메뉴 > 홈으로
-        BOOK_SEARCH("/mobile/search/plusSearchSimple.do"), // 메인 하단메뉴 > 도서검색
-        LOAN_STATUS("/mobile/mylib/reservationStatusList.do"), // 메인 하단메뉴 > 대출예약현황
-        BOOK_INTEREST("/mobile/mylib/basketList.do"); // 메인 하단메뉴 > 관심도서
+        BOOK_SEARCH("/mobile/search/searchSimple.do"), // 메인 하단메뉴 > 도서검색
+        MY_LIBRARY("/mobile/member/mypage/myInfo.do"), // 메인 하단메뉴 > 나의 도서관
     }
     enum class WebScheme(val scheme: String) {
-        OPEN_LOGIN("kr.co.jnet.gjlib://openLogin"),
-        OPEN_BARCODE("kr.co.jnet.gjlib://openBarcode"),
-        APP_SETTING("kr.co.jnet.gjlib://appSetting");
+        OPEN_LOGIN("kr.co.jnet.gwanak://openLogin"),
+        OPEN_BARCODE("kr.co.jnet.gwanak://openBarcode"),
+        APP_SETTING("kr.co.jnet.gwanak://appSetting");
 
     }
 }

@@ -39,18 +39,20 @@
 
                 <ImageView
                     android:id="@+id/mainTabImage1"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginTop="15dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/main_bottom_one_selector"/>
 
                 <TextView
                     android:id="@+id/mainTabLabel1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/noto_sans_kr_medium"
-                    android:textColor="@color/color_292724"
-                    android:textSize="13dp" />
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/style_regular"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    android:text="@string/home"/>
             </LinearLayout>
 
             <LinearLayout
@@ -65,43 +67,49 @@
 
                 <ImageView
                     android:id="@+id/mainTabImage2"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginTop="15dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/main_bottom_two_selector"/>
 
                 <TextView
                     android:id="@+id/mainTabLabel2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/noto_sans_kr_medium"
-                    android:textColor="@color/color_292724"
-                    android:textSize="13dp"  />
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/style_regular"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    android:text="@string/book_search"/>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/mainTab3_1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1.5"
+                android:layout_weight="1"
                 android:gravity="center_horizontal"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                rippleColor="@{@color/ripple_effect}"
+                android:onClick="@{() -> viewModel.setSelectTab(EnumApp.MainPage.MY_LIBRARY)}">
 
                 <ImageView
                     android:id="@+id/mainTabImage3"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
                     android:layout_marginTop="15dp"
-                    android:visibility="invisible"/>
+                    android:visibility="visible"
+                    android:background="@drawable/main_bottom_three_selector"/>
 
                 <TextView
                     android:id="@+id/mainTabLabel3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/noto_sans_kr_medium"
-                    android:textColor="@color/color_292724"
-                    android:textSize="13dp" />
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/style_regular"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    android:text="@string/my_library"/>
             </LinearLayout>
 
             <LinearLayout
@@ -112,22 +120,24 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 rippleColor="@{@color/ripple_effect}"
-                android:onClick="@{() -> viewModel.setSelectTab(EnumApp.MainPage.LOAN_STATUS)}">
+                android:onClick="@{() -> viewModel.setSelectTab(EnumApp.MainPage.SETTING)}">
 
                 <ImageView
                     android:id="@+id/mainTabImage4"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginTop="15dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/main_bottom_four_selector"/>
 
                 <TextView
                     android:id="@+id/mainTabLabel4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/noto_sans_kr_medium"
-                    android:textColor="@color/color_292724"
-                    android:textSize="13dp" />
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/style_regular"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    android:text="@string/setting" />
             </LinearLayout>
 
             <LinearLayout
@@ -138,22 +148,24 @@
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
                 rippleColor="@{@color/ripple_effect}"
-                android:onClick="@{() -> viewModel.setSelectTab(EnumApp.MainPage.BOOK_INTEREST)}">
+                android:onClick="@{() -> viewModel.setSelectTab(EnumApp.MainPage.MENU)}">
 
                 <ImageView
                     android:id="@+id/mainTabImage5"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:layout_marginTop="15dp" />
+                    android:layout_width="30dp"
+                    android:layout_height="28dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/main_bottom_five_selector"/>
 
                 <TextView
                     android:id="@+id/mainTabLabel5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
-                    android:fontFamily="@font/noto_sans_kr_medium"
-                    android:textColor="@color/color_292724"
-                    android:textSize="13dp"/>
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/style_regular"
+                    android:textColor="@color/black"
+                    android:textSize="12dp"
+                    android:text="@string/menu"/>
             </LinearLayout>
         </LinearLayout>
     </RelativeLayout>

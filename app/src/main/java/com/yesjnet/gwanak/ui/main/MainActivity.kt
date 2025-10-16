@@ -18,6 +18,7 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
+import android.view.View
 import android.webkit.GeolocationPermissions
 import android.webkit.JsResult
 import android.webkit.URLUtil
@@ -34,6 +35,7 @@ import com.yesjnet.gwanak.data.model.PushData
 import com.yesjnet.gwanak.data.model.eventbus.EBMainPageEvent
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.databinding.ActivityMainBinding
+import com.yesjnet.gwanak.extension.OnSingleClickListener
 import com.yesjnet.gwanak.extension.browse
 import com.yesjnet.gwanak.extension.showAlertConfirm
 import com.yesjnet.gwanak.extension.showAlertOK
@@ -57,7 +59,7 @@ import kotlin.math.sqrt
 
 
 class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_main),
-    SensorEventListener {
+    SensorEventListener, OnSingleClickListener {
 
     private val pref: SecurePreference by inject()
     private val localNotifyManager: LocalNotificationManager by inject()
@@ -89,6 +91,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
     override fun onInitView() {
         binding.viewModel = getViewModel()
         binding.lifecycleOwner = this
+        binding.activity = this
         EventBus.getDefault().register(this)
 
         Handler(Looper.getMainLooper()).postDelayed({
@@ -133,7 +136,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                     binding.srlRefresh.isRefreshing = false
             }
             onSelectTab.observe(this@MainActivity) {
-                if (EnumApp.MainPage.MEMBERSHIP_CARD == it) {
+                if (EnumApp.MainPage.MY_LIBRARY == it) {
                     val memberInfo = binding.viewModel?.onMemberInfo?.value
                     if (isLoginCheck(memberInfo)) {
                         val userNo = memberInfo?.userNo ?: ""
@@ -157,26 +160,30 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
 //                    binding.icMainBottom.mainTab4.isActivated = false
 //                    binding.icMainBottom.mainTab5.isActivated = false
 
-                    val webType = when (it) {
+                    when (it) {
                         EnumApp.MainPage.HOME -> {
 //                            binding.icMainBottom.mainTab1.isActivated = true
-                            EnumApp.WebType.HOME
+                            setWebView(EnumApp.WebType.HOME, binding.viewModel?.userInfo?.getMember())
                         }
                         EnumApp.MainPage.BOOK_SEARCH -> {
 //                            binding.icMainBottom.mainTab2.isActivated = true
-                            EnumApp.WebType.BOOK_SEARCH
+                            setWebView(EnumApp.WebType.BOOK_SEARCH, binding.viewModel?.userInfo?.getMember())
                         }
-                        EnumApp.MainPage.LOAN_STATUS -> {
+                        EnumApp.MainPage.MY_LIBRARY -> {
+//                            binding.icMainBottom.mainTab2.isActivated = true
+                            setWebView(EnumApp.WebType.MY_LIBRARY, binding.viewModel?.userInfo?.getMember())
+                        }
+                        EnumApp.MainPage.SETTING -> {
 //                            binding.icMainBottom.mainTab4.isActivated = true
-                            EnumApp.WebType.LOAN_STATUS
+                            startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+
                         }
-                        EnumApp.MainPage.BOOK_INTEREST -> {
+                        EnumApp.MainPage.MENU -> {
 //                            binding.icMainBottom.mainTab5.isActivated = true
-                            EnumApp.WebType.BOOK_INTEREST
+                            startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
                         }
                         else -> EnumApp.WebType.HOME
                     }
-                    setWebView(webType, binding.viewModel?.userInfo?.getMember())
 //                selectPage(it)
                 }
             }
@@ -315,12 +322,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
 
     // webview start
     private fun setWebView(webType: EnumApp.WebType, memberInfo: MemberInfo? = null) {
-        val url = when (webType) {
-            EnumApp.WebType.HOME -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-            EnumApp.WebType.BOOK_SEARCH -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-            EnumApp.WebType.LOAN_STATUS -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-            EnumApp.WebType.BOOK_INTEREST -> "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
-        }
+        val url = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId ?: "", "utf-8")}&returnUrl=${URLEncoder.encode(webType.webViewUrl, "utf-8")}"
         binding.wv.loadUrl(url)
     }
 
@@ -455,7 +457,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
     inner class WebViewClient : android.webkit.WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-            binding.viewModel?.onDataProgress?.value = true
+//            binding.viewModel?.onDataProgress?.value = true
         }
 
         //        override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
@@ -482,7 +484,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                 }
                 if (canOpen) view.loadUrl("javascript:clearTimeout(AppCheckTimer);")
                 return true
-            } else if (url.indexOf("kr.co.jnet.gjlib") >= 0) {
+            } else if (url.indexOf("kr.co.jnet.gwanak") >= 0) {
                 return try {
                     if (url.contains("openUrl")) {
                         val param: Map<*, *> = parseParam(url)
@@ -594,19 +596,45 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
      * webview 스크립트 이동처리
      */
     fun loadUrlScheme(url: String) {
-        if (url.startsWith(EnumApp.WebScheme.OPEN_LOGIN.scheme)) {
+//        if (url.startsWith(EnumApp.WebScheme.OPEN_LOGIN.scheme)) {
+//            startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+//        } else if (url.startsWith(EnumApp.WebScheme.OPEN_BARCODE.scheme)) {
+//            val userNo = binding.viewModel?.onMemberInfo?.value?.userNo ?: ""
+//            if (userNo.isNullOrEmpty()) {
+//                showAlertOK(message = getString(R.string.qrcode_associate_member_error_msg))
+//            } else {
+//                Logger.d("qrcode")
+//            }
+//        } else if (url.startsWith(EnumApp.WebScheme.APP_SETTING.scheme)) {
+//            startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+//        } else {
+//            Logger.d("loadUrl ")
+//        }
+        // 서버에서 https:// 부터 내려주기에 아래로 수정했는데 서버에서 https:// 안주고 kr 부터 주면 아래 코드는 제거, 위 주석 해제
+        if (url.indexOf(EnumApp.WebScheme.OPEN_LOGIN.scheme) >= 0) {
             startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
-        } else if (url.startsWith(EnumApp.WebScheme.OPEN_BARCODE.scheme)) {
+        } else if (url.indexOf(EnumApp.WebScheme.OPEN_BARCODE.scheme) >= 0) {
             val userNo = binding.viewModel?.onMemberInfo?.value?.userNo ?: ""
             if (userNo.isNullOrEmpty()) {
                 showAlertOK(message = getString(R.string.qrcode_associate_member_error_msg))
             } else {
                 Logger.d("qrcode")
             }
-        } else if (url.startsWith(EnumApp.WebScheme.APP_SETTING.scheme)) {
+        } else if (url.indexOf(EnumApp.WebScheme.APP_SETTING.scheme) >= 0) {
             startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
         } else {
             Logger.d("loadUrl ")
+        }
+    }
+
+    override fun onSingleClick(view: View) {
+        when (view.id) {
+            R.id.ivBanner -> {
+                Logger.d("ivbanner")
+            }
+            R.id.ivBarcode -> {
+                Logger.d("ivBarcode")
+            }
         }
     }
     // webview end

@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{label}"
+            tools:text="@string/auto_login"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@id/swcSwitch"
             app:layout_constraintBottom_toBottomOf="@id/swcSwitch"/>
@@ -39,6 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@{desc}"
+            tools:text="@string/auto_login_desc"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/swcSwitch"/>
     </androidx.constraintlayout.widget.ConstraintLayout>

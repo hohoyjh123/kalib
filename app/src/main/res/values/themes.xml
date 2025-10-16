@@ -106,15 +106,15 @@
     <style name="LabelText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">19dp</item>
+        <item name="android:textSize">18dp</item>
         <item name="android:textColor">@color/color_333333</item>
-        <item name="android:fontFamily">@font/style_bold</item>
+        <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
     </style>
 
     <style name="DescText">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">17dp</item>
+        <item name="android:textSize">18dp</item>
         <item name="android:textColor">@color/color_777777</item>
         <item name="android:fontFamily">@font/noto_sans_kr_medium</item>
     </style>
