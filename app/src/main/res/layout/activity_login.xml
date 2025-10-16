@@ -24,47 +24,19 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/clDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="20dp"
-                    android:background="@color/color_EAEFFB"
-                    app:layout_constraintTop_toTopOf="parent">
-                    <TextView
-                        android:id="@+id/tvDesc1"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:textSize="19dp"
-                        android:fontFamily="@font/style_bold"
-                        android:textColor="@color/color_222222"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                    <TextView
-                        android:id="@+id/tvDesc2"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:textSize="17dp"
-                        android:fontFamily="@font/style_regular"
-                        android:textColor="@color/color_777777"
-                        app:layout_constraintTop_toBottomOf="@id/tvDesc1"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
                 <TextView
-                    android:id="@+id/tvUserLogin"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tvDesc1"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginTop="42dp"
+                    android:gravity="center_horizontal"
                     android:textSize="18dp"
-                    android:fontFamily="@font/style_bold"
-                    android:textColor="@color/color_333333"
-                    app:layout_constraintTop_toBottomOf="@id/clDesc"
-                    app:layout_constraintStart_toStartOf="parent"/>
+                    android:fontFamily="@font/noto_sans_kr_medium"
+                    android:textColor="@color/color_222222"
+                    android:text="@string/login_desc_1"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"/>
 
                 <!-- 아이디 입력 -->
                 <androidx.appcompat.widget.AppCompatEditText
@@ -76,7 +48,7 @@
                     android:layout_marginTop="20dp"
                     android:text="@={viewModel.onBindId}"
                     android:singleLine="true"
-                    app:layout_constraintTop_toBottomOf="@id/tvUserLogin"
+                    app:layout_constraintTop_toBottomOf="@id/tvDesc1"
                     style="@style/DefaultEditText"/>
 
                 <!-- 비밀번호 입력 -->
@@ -99,6 +71,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
+                    android:visibility="gone"
                     app:value="@{@string/auto_login}"
                     app:isChecked="@{viewModel.onAutoLogin}"
                     app:listener="@{activity}"
@@ -113,17 +86,21 @@
                     android:textSize="21dp"
                     android:textColor="@color/white"
                     android:fontFamily="@font/style_bold"
+                    android:text="@string/login"
                     android:onClick="@{() -> viewModel.onClickLogin(viewModel.onBindId, viewModel.onBindPwd)}"
-                    bgColor="@{@color/color_3A3DAA}"
+                    bgColor="@{@color/primary_color}"
                     rippleColor="@{@color/ripple_effect}"
-                    app:layout_constraintTop_toBottomOf="@id/icAutoLogin"/>
+                    app:layout_constraintTop_toBottomOf="@id/icAutoLogin"
+                    tools:background="@color/primary_color"/>
 
+                <!-- 회원가입, 아이디 찾기, 비밀번호 찾기 미사용 숨기기 처리 -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/clIdPwd"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginHorizontal="20dp"
+                    android:visibility="gone"
                     app:layout_constraintTop_toBottomOf="@id/btLogin">
                     <TextView
                         android:id="@+id/tvSignup"
@@ -187,6 +164,32 @@
                         app:layout_constraintStart_toEndOf="@id/tvDot2"
                         app:layout_constraintEnd_toEndOf="parent"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <include
+                    android:id="@+id/icDotInfo1"
+                    layout="@layout/layout_dot_text_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginHorizontal="14dp"
+                    app:value="@{@string/login_caption_1}"
+                    app:textColor="@{@color/color_555555}"
+                    app:dotColor="@{@drawable/circle_666666}"
+                    app:layout_constraintTop_toBottomOf="@+id/clIdPwd"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+                <include
+                    android:id="@+id/icDotInfo2"
+                    layout="@layout/layout_dot_text_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginHorizontal="14dp"
+                    app:value="@{@string/login_caption_1}"
+                    app:textColor="@{@color/color_555555}"
+                    app:dotColor="@{@drawable/circle_666666}"
+                    app:layout_constraintTop_toBottomOf="@+id/icDotInfo1"
+                    app:layout_constraintLeft_toLeftOf="parent"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 

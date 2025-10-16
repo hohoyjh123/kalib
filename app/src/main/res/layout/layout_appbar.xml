@@ -23,7 +23,7 @@
             android:id="@+id/clMain"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:background="@color/color_F1F3F5"
+            android:background="@color/white"
             android:clipToPadding="false"
             android:clipChildren="false"
             app:elevation="0dp">
@@ -124,6 +124,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/ibtRight" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/color_D2D2D2"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.appbar.AppBarLayout>
 </layout>

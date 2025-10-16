@@ -28,195 +28,154 @@ import javax.crypto.NoSuchPaddingException
 import javax.security.auth.x500.X500Principal
 
 /**
- *
- * Description: DATA 암호화
+ * Description: DATA 암호화 (RSA)
  */
-class RSACryptor
-/**
- * Singleton Pattern * Call -> RSACryptor.getInstance().method()
- */
-private constructor() {
+class RSACryptor private constructor() {
+
     private var keyEntry: KeyStore.Entry? = null
 
-    private object RSACryptorHolder {
-        val INSTANCE = RSACryptor()
+    companion object {
+        private const val TAG = "RSACryptor"
+        private const val CIPHER_ALGORITHM = "RSA/ECB/PKCS1Padding"
+
+        val instance: RSACryptor by lazy { RSACryptor() }
     }
 
-    //Android KeyStore 시스템에서는 암호화 키를
-    // 컨테이너(시스템만이 접근 가능한 곳)에 저장해야 하므로
-    // 이 키를 기기에서 추출해내기가 더 어려움
     fun init(context: Context) {
         try {
             val ks = KeyStore.getInstance("AndroidKeyStore")
             ks.load(null)
-            if (!ks.containsAlias(context.packageName)) {
+
+            val alias = context.packageName
+
+            if (!ks.containsAlias(alias)) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    initAndroidM(context.packageName)
+                    initAndroidM(alias)
                 } else {
-                    initAndroidK(context)
+                    initAndroidK(context, alias)
                 }
             }
-            keyEntry = ks.getEntry(context.packageName, null)
-        } catch (e: KeyStoreException) {
-            Logger.e("Initialize fail = $e")
-        } catch (e: IOException) {
-            Logger.e("Initialize fail = $e")
-        } catch (e: NoSuchAlgorithmException) {
-            Logger.e("Initialize fail = $e")
-        } catch (e: UnrecoverableEntryException) {
-            Logger.e("Initialize fail = $e")
-        } catch (e: CertificateException) {
-            Logger.e("Initialize fail = $e")
-        } catch (e : Exception) {
-            Logger.e("Initialize fail = $e")
+
+            keyEntry = ks.getEntry(alias, null)
+        } catch (e: Exception) {
+            Logger.e("RSA Initialize fail: $e")
         }
     }
 
-    //API Level 23 이상(마쉬멜로우) 개인키 생성
+    // Android M 이상 (API 23+)
     private fun initAndroidM(alias: String) {
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                //AndroidKeyStore 정확하게 기입
-                val kpg =
-                    KeyPairGenerator.getInstance(
-                        KeyProperties.KEY_ALGORITHM_RSA,
-                        "AndroidKeyStore"
-                    )
-                kpg.initialize(
-                    KeyGenParameterSpec.Builder(
-                        alias,
-                        KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-                    ).setAlgorithmParameterSpec(
-                        RSAKeyGenParameterSpec(
-                            2048,
-                            RSAKeyGenParameterSpec.F4
-                        )
-                    ).setBlockModes(KeyProperties.BLOCK_MODE_CBC)
-                        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
-                        .setDigests(
-                            KeyProperties.DIGEST_SHA512,
-                            KeyProperties.DIGEST_SHA384,
-                            KeyProperties.DIGEST_SHA256
-                        ).setUserAuthenticationRequired(false).build()
+            val kpg = KeyPairGenerator.getInstance(
+                KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore"
+            )
+            kpg.initialize(
+                KeyGenParameterSpec.Builder(
+                    alias,
+                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                 )
-                kpg.generateKeyPair()
-                Logger.d("RSA Initialize")
-            }
-        } catch (e: GeneralSecurityException) {
-            Logger.e("이 디바이스는 관련 알고리즘을 지원하지 않음.$e")
+                    // ✅ RSA는 ECB 모드 + PKCS1Padding만 사용해야 함
+                    .setBlockModes(KeyProperties.BLOCK_MODE_ECB)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+                    .setAlgorithmParameterSpec(RSAKeyGenParameterSpec(2048, RSAKeyGenParameterSpec.F4))
+                    .setDigests(
+                        KeyProperties.DIGEST_SHA256,
+                        KeyProperties.DIGEST_SHA384,
+                        KeyProperties.DIGEST_SHA512
+                    )
+                    .setUserAuthenticationRequired(false)
+                    .build()
+            )
+            kpg.generateKeyPair()
+            Logger.d("RSA Initialize (M+) complete")
+        } catch (e: Exception) {
+            Logger.e("RSA key generation failed: $e")
         }
     }
 
-    //API Level 19 이상(킷캣) 개인키 생성
-    private fun initAndroidK(context: Context) {
+    // Android K~L (API 19~22)
+    private fun initAndroidK(context: Context, alias: String) {
         try {
-            //유효성 기간
-            val start = getLocaleCalendar()
-            val end = getLocaleCalendar()
+            val start = Calendar.getInstance()
+            val end = Calendar.getInstance()
             end.add(Calendar.YEAR, 25)
-            //AndroidKeyStore 정확하게 기입
-            val kpg =
-                KeyPairGenerator.getInstance("RSA", "AndroidKeyStore")
+
+            val kpg = KeyPairGenerator.getInstance("RSA", "AndroidKeyStore")
             kpg.initialize(
-                KeyPairGeneratorSpec.Builder(context).setKeySize(2048)
-                    .setAlias(context.packageName)
-                    .setSubject(X500Principal("CN=myKey"))
-                    .setSerialNumber(BigInteger.ONE).setStartDate(start.time)
-                    .setEndDate(end.time).build()
+                KeyPairGeneratorSpec.Builder(context)
+                    .setAlias(alias)
+                    .setSubject(X500Principal("CN=$alias"))
+                    .setSerialNumber(BigInteger.ONE)
+                    .setStartDate(start.time)
+                    .setEndDate(end.time)
+                    .setKeySize(2048)
+                    .build()
             )
             kpg.generateKeyPair()
-            Logger.d("RSA Initialize")
+            Logger.d("RSA Initialize (K+) complete")
         } catch (e: Exception) {
-            Logger.e("이 디바이스는 관련 알고리즘을 지원하지 않음.$e")
+            Logger.e("RSA key generation failed: $e")
         }
     }
 
     /**
-     * 문자열 암호화
-     * @param plain 암호화할 문자열
-     * @return 암호화된 문자열
+     * 문자열 암호화 (Public Key)
      */
     fun encrypt(plain: String): String {
         return try {
-            val bytes = plain.toByteArray(charset("UTF-8"))
-            val cipher =
-                Cipher.getInstance(CIPHER_ALGORITHM)
-            //Public Key로 암호화
+            val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
             cipher.init(
                 Cipher.ENCRYPT_MODE,
-                (keyEntry as KeyStore.PrivateKeyEntry?)!!.certificate
-                    .publicKey
+                (keyEntry as KeyStore.PrivateKeyEntry).certificate.publicKey
             )
-            val encryptedBytes = cipher.doFinal(bytes)
-            Logger.d("Encrypted Text : ${String(Base64.encode(encryptedBytes, Base64.DEFAULT))}")
-            String(Base64.encode(encryptedBytes, Base64.DEFAULT))
-        } catch (e: UnsupportedEncodingException) {
-            Logger.e("Encrypt fail $e")
-            plain
-        } catch (e: NoSuchAlgorithmException) {
-            Logger.e("Encrypt fail $e")
-            plain
-        } catch (e: NoSuchPaddingException) {
-            Logger.e("Encrypt fail $e")
-            plain
-        } catch (e: InvalidKeyException) {
-            Logger.e("Encrypt fail $e")
-            plain
-        } catch (e: IllegalBlockSizeException) {
-            Logger.e("Encrypt fail $e")
-            plain
-        } catch (e: BadPaddingException) {
-            Logger.e("Encrypt fail $e")
+
+            val encryptedBytes = cipher.doFinal(plain.toByteArray(Charsets.UTF_8))
+            val encoded = Base64.encodeToString(encryptedBytes, Base64.NO_WRAP)
+
+            Logger.d("Encrypted Text : $encoded")
+            encoded
+        } catch (e: Exception) {
+            Logger.e("Encrypt fail: $e")
             plain
         }
     }
 
-    /**
-     * 문자열 복호화
-     * @param encryptedText 복호화할 문자열
-     * @return string
-     */
     fun decrypt(encryptedText: String): String {
         return try {
-            val cipher =
-                Cipher.getInstance(CIPHER_ALGORITHM)
-            // Private Key로 복호화
+            val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
             cipher.init(
                 Cipher.DECRYPT_MODE,
-                (keyEntry as KeyStore.PrivateKeyEntry?)!!.privateKey
+                (keyEntry as KeyStore.PrivateKeyEntry).privateKey
             )
-            val base64Bytes = encryptedText.toByteArray(charset("UTF-8"))
-            val decryptedBytes =
-                Base64.decode(base64Bytes, Base64.DEFAULT)
-            Logger.d("Decrypted Text : " + String(cipher.doFinal(decryptedBytes)))
-            String(cipher.doFinal(decryptedBytes))
-        } catch (e: NoSuchAlgorithmException) {
-            Logger.e("Decrypt fail $e")
-            encryptedText
-        } catch (e: NoSuchPaddingException) {
-            Logger.e("Decrypt fail $e")
-            encryptedText
-        } catch (e: InvalidKeyException) {
-            Logger.e("Decrypt fail $e")
-            encryptedText
-        } catch (e: UnsupportedEncodingException) {
-            Logger.e("Decrypt fail $e")
+
+            // 안전한 디코드(오직 NO_WRAP 사용)
+            val decodedBytes = try {
+                Base64.decode(encryptedText, Base64.NO_WRAP)
+            } catch (e: IllegalArgumentException) {
+                Logger.e("Decrypt fail: Base64 decode error: $e - inputLen=${encryptedText.length}")
+                return encryptedText
+            }
+
+            Logger.d("Decrypt debug: decodedLen=${decodedBytes.size}, prefix=${bytesPrefixHex(decodedBytes, 16)}")
+
+            val decryptedBytes = cipher.doFinal(decodedBytes)
+            val decryptedText = String(decryptedBytes, Charsets.UTF_8)
+            Logger.d("Decrypted Text : $decryptedText")
+            decryptedText
+        } catch (e: IllegalBlockSizeException) {
+            Logger.e("Decrypt fail: IllegalBlockSizeException: ${e.message}. inputLen=${encryptedText.length}")
             encryptedText
         } catch (e: BadPaddingException) {
-            Logger.e("Decrypt fail $e")
+            Logger.e("Decrypt fail: BadPaddingException: ${e.message}")
             encryptedText
-        } catch (e: IllegalBlockSizeException) {
-            Logger.e("Decrypt fail $e")
+        } catch (e: Exception) {
+            Logger.e("Decrypt fail: ${e.javaClass.simpleName}: ${e.message}")
             encryptedText
         }
     }
 
-    companion object {
-        private const val TAG = "RSACryptor"
-
-        //비대칭 암호화(공개키) 알고리즘 호출 상수
-        private const val CIPHER_ALGORITHM = "RSA/ECB/PKCS1Padding"
-        val instance: RSACryptor
-            get() = RSACryptorHolder.INSTANCE
+    // 헬퍼: 바이트 앞부분을 헥사로 보여줌
+    private fun bytesPrefixHex(bytes: ByteArray, max: Int): String {
+        val len = minOf(bytes.size, max)
+        return bytes.take(len).joinToString("") { String.format("%02x", it) }
     }
 }

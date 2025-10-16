@@ -136,55 +136,29 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                     binding.srlRefresh.isRefreshing = false
             }
             onSelectTab.observe(this@MainActivity) {
-                if (EnumApp.MainPage.MY_LIBRARY == it) {
-                    val memberInfo = binding.viewModel?.onMemberInfo?.value
-                    if (isLoginCheck(memberInfo)) {
-                        val userNo = memberInfo?.userNo ?: ""
-                        if (userNo.isNullOrEmpty()) {
-                            showAlertOK(message = getString(R.string.qrcode_associate_member_error_msg))
-                        } else {
-                            Logger.d("qrcode")
-                        }
-                    // 로그인 전
-                    } else {
-                        showAlertOK(message = getString(R.string.available_after_logging_in), okListener = object: BaseDialogFragment.MyOnClickListener {
-                            override fun onClick(obj: Any?) {
-                                startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
-                            }
-
-                        })
-                    }
-                } else {
-//                    binding.icMainBottom.mainTab1.isActivated = false
-//                    binding.icMainBottom.mainTab2.isActivated = false
-//                    binding.icMainBottom.mainTab4.isActivated = false
-//                    binding.icMainBottom.mainTab5.isActivated = false
-
-                    when (it) {
-                        EnumApp.MainPage.HOME -> {
+                when (it) {
+                    EnumApp.MainPage.HOME -> {
 //                            binding.icMainBottom.mainTab1.isActivated = true
-                            setWebView(EnumApp.WebType.HOME, binding.viewModel?.userInfo?.getMember())
-                        }
-                        EnumApp.MainPage.BOOK_SEARCH -> {
-//                            binding.icMainBottom.mainTab2.isActivated = true
-                            setWebView(EnumApp.WebType.BOOK_SEARCH, binding.viewModel?.userInfo?.getMember())
-                        }
-                        EnumApp.MainPage.MY_LIBRARY -> {
-//                            binding.icMainBottom.mainTab2.isActivated = true
-                            setWebView(EnumApp.WebType.MY_LIBRARY, binding.viewModel?.userInfo?.getMember())
-                        }
-                        EnumApp.MainPage.SETTING -> {
-//                            binding.icMainBottom.mainTab4.isActivated = true
-                            startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
-
-                        }
-                        EnumApp.MainPage.MENU -> {
-//                            binding.icMainBottom.mainTab5.isActivated = true
-                            startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
-                        }
-                        else -> EnumApp.WebType.HOME
+                        setWebView(EnumApp.WebType.HOME, binding.viewModel?.userInfo?.getMember())
                     }
-//                selectPage(it)
+                    EnumApp.MainPage.BOOK_SEARCH -> {
+//                            binding.icMainBottom.mainTab2.isActivated = true
+                        setWebView(EnumApp.WebType.BOOK_SEARCH, binding.viewModel?.userInfo?.getMember())
+                    }
+                    EnumApp.MainPage.MY_LIBRARY -> {
+//                            binding.icMainBottom.mainTab2.isActivated = true
+                        setWebView(EnumApp.WebType.MY_LIBRARY, binding.viewModel?.userInfo?.getMember())
+                    }
+                    EnumApp.MainPage.SETTING -> {
+//                            binding.icMainBottom.mainTab4.isActivated = true
+                        startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+
+                    }
+                    EnumApp.MainPage.MENU -> {
+//                            binding.icMainBottom.mainTab5.isActivated = true
+                        startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+                    }
+                    else -> EnumApp.WebType.HOME
                 }
             }
 

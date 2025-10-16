@@ -26,6 +26,7 @@ data class PushInfo(
     @SerializedName("agent") val agent: Int,
     @SerializedName("flag") val flag: String,
     @SerializedName("push1Yn") val push1Yn: String,
+    @SerializedName("push2Yn") val push2Yn: String,
     @SerializedName("userId") val userId: String
 ): Serializable
 

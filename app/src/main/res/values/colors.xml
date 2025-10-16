@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="primary_color">@color/color_E4007F</color>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -58,6 +59,6 @@
     <color name="color_CCCCCC">#CCCCCC</color>
     <color name="color_EEEDED">#EEEDED</color>
     <color name="color_F8F8F8">#F8F8F8</color>
-
     <color name="color_E4007F">#E4007F</color>
+    <color name="color_FFF8FC">#FFF8FC</color>
 </resources>

@@ -57,15 +57,15 @@ class SettingViewModel(
         get() = inAutoLogin
     private val inAutoLogin: MutableLiveData<Boolean> = MutableLiveData()
 
-    // 생체인증 로그인
-    val onBiometricLogin: MutableLiveData<Boolean>
-        get() = inBiometricLogin
-    private val inBiometricLogin: MutableLiveData<Boolean> = MutableLiveData()
-
     // 푸시알림 설정
     val onPushAlarm: MutableLiveData<Boolean>
         get() = inPushAlarm
     private val inPushAlarm: MutableLiveData<Boolean> = MutableLiveData()
+
+    // 재동의 알림
+    val onReAgreeAlarm: MutableLiveData<Boolean>
+        get() = inReAgreeAlarm
+    private val inReAgreeAlarm: MutableLiveData<Boolean> = MutableLiveData()
 
     // 흔들어열기 설정
     val onShakeOpen: MutableLiveData<Boolean>
@@ -98,14 +98,22 @@ class SettingViewModel(
         inCurrentVersion.postValue(BuildConfig.VERSION_NAME)
         inLatestVersion.postValue(pref.getStrValue(ConstsData.PrefCode.APP_VERSION, ""))
         inAutoLogin.postValue(pref.getConfigBool(ConstsData.PrefCode.AUTO_LOGIN, false))
-        inBiometricLogin.postValue(pref.getConfigBool(ConstsData.PrefCode.BIOMETRIC_LOGIN, false))
         inPushAlarm.postValue(pref.getConfigBool(ConstsData.PrefCode.PUSH_ALARM, false))
+        inReAgreeAlarm.postValue(pref.getConfigBool(ConstsData.PrefCode.RE_AGREE_ALARM, false))
         inShakeOpen.postValue(pref.getConfigBool(ConstsData.PrefCode.SHAKE_FLAG, false))
 
     }
 
     fun updateMemberInfo(memberInfo: MemberInfo?) {
         this.inMemberInfo.value = memberInfo
+    }
+
+    fun updatePushAlarm(isEnable: Boolean) {
+        inPushAlarm.postValue(isEnable)
+    }
+
+    fun updateReAgreeAlarm(isEnable: Boolean) {
+        inReAgreeAlarm.postValue(isEnable)
     }
 
     fun updateIsChangeReady(isChangeReady: Boolean) {
@@ -159,6 +167,11 @@ class SettingViewModel(
                     inPushAlarm.postValue(true)
                 } else {
                     inPushAlarm.postValue(false)
+                }
+                if (EnumApp.FlagYN.booleanByStatus(resource.resBase.push2Yn)) {
+                    inReAgreeAlarm.postValue(true)
+                } else {
+                    inReAgreeAlarm.postValue(false)
                 }
                 CoroutineScope(Dispatchers.Main).launch {
                     delay(696)
@@ -219,10 +232,11 @@ class SettingViewModel(
     /**
      * 알림설정
      */
-    fun postUpdatePushKey(userId: String, switch1: String) {
+    fun postUpdatePushKey(userId: String, push1Yn: String, push2Yn: String) {
         val params = mutableMapOf<String, String>().apply {
             this[ConstsData.ReqParam.USER_ID] = userId
-            this[ConstsData.ReqParam.SWITCH1] = switch1
+            this[ConstsData.ReqParam.PUSH_1_YN] = push1Yn
+            this[ConstsData.ReqParam.PUSH_2_YN] = push2Yn
         }
         val call = etcRepo.postUpdatePushKey(params)
         val response = Response.create(call, object : APIResult<DeviceInfo> {
@@ -233,6 +247,8 @@ class SettingViewModel(
             override fun onSuccess(resource: APIResource<DeviceInfo>) {
                 Logger.d("resource = $resource")
                 if (EnumApp.FlagYN.booleanByStatus(resource.resBase.flag)) {
+                    pref.setConfigBool(ConstsData.PrefCode.PUSH_ALARM, EnumApp.FlagYN.booleanByStatus(push1Yn))
+                    pref.setConfigBool(ConstsData.PrefCode.RE_AGREE_ALARM, EnumApp.FlagYN.booleanByStatus(push2Yn))
 
                 } else {
 

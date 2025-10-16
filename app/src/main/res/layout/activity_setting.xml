@@ -115,26 +115,43 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- 푸시알림 설정 -->
-                <include
-                    android:id="@+id/icPushSetting"
-                    layout="@layout/layout_alarm_switch"
-                    android:layout_width="0dp"
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tvPushLabel"
+                    style="@style/LabelText"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
                     android:layout_marginTop="15dp"
-                    app:isChecked="@{viewModel.onPushAlarm}"
-                    app:label="@{@string/push_setting}"
-                    app:desc="@{@string/push_setting_desc}"
+                    android:text="@string/push_setting"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/clLoginSetting"/>
+                    app:layout_constraintTop_toBottomOf="@id/clLoginSetting" />
+                <include
+                    android:id="@+id/icPush1"
+                    layout="@layout/layout_checkbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:value="@{@string/push_setting_desc}"
+                    app:isChecked="@{viewModel.onPushAlarm}"
+                    app:listener="@{activity}"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPushLabel"/>
+                <include
+                    android:id="@+id/icPush2"
+                    layout="@layout/layout_checkbox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="20dp"
+                    app:value="@{@string/push_re_agree_desc}"
+                    app:isChecked="@{viewModel.onReAgreeAlarm}"
+                    app:listener="@{activity}"
+                    app:layout_constraintTop_toBottomOf="@+id/icPush1"/>
                 <View
                     android:id="@+id/vPushSettingLine"
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_marginTop="17dp"
                     android:background="@color/color_EEEDED"
-                    app:layout_constraintTop_toBottomOf="@id/icPushSetting"
+                    app:layout_constraintTop_toBottomOf="@id/icPush2"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
                 <!-- 흔들어 열기 -->

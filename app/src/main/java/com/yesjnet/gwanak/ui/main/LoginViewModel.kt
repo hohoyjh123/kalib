@@ -277,6 +277,8 @@ class LoginViewModel(
             this[ConstsData.ReqParam.USER_ID] = id
             this[ConstsData.ReqParam.FCM] = deviceToken
             this[ConstsData.ReqParam.USER_KEY] = userKey
+            this[ConstsData.ReqParam.PUSH_1_YN] = EnumApp.FlagYN.NO.flagYN
+            this[ConstsData.ReqParam.PUSH_2_YN] = EnumApp.FlagYN.NO.flagYN
         }
         Logger.d("fcm = $deviceToken")
         val call = etcRepo.postPushKey(params)

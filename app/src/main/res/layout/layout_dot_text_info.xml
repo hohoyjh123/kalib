@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="value" type="String" />
+        <variable name="dotColor" type="android.graphics.drawable.Drawable" />
+        <variable name="textColor" type="Integer" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMain"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivDot"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:layout_marginTop="7dp"
+            android:src="@{dotColor}"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:fontFamily="sans-serif"
+            android:textStyle="normal"
+            android:textSize="14dp"
+            android:text="@{value}"
+            android:textColor="@{textColor == 0 ? @color/color_555555 : textColor}"
+            tools:text="bla bla bla bla bla bla"
+            app:layout_constraintStart_toEndOf="@+id/ivDot"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

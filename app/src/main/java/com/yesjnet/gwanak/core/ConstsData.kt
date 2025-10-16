@@ -93,6 +93,8 @@ class ConstsData {
             const val FCM = "fcm"
             const val USER_KEY = "userKey"
             const val SWITCH1 = "switch1"
+            const val PUSH_1_YN = "push1Yn"
+            const val PUSH_2_YN = "push2Yn"
             const val PUSH_KEY = "pushkey"
             const val APP_USER_NO = "appUserNo"
             const val APP_USER_NM = "appUserNm"
@@ -118,8 +120,8 @@ class ConstsData {
             const val SHAKE_FLAG = "SHAKE_FLAG" // 흔들어열기 캐시저장
             const val APP_VERSION = "APP_VERSION" // 앱 최신버전 (서버)
             const val AUTO_LOGIN = "AUTO_LOGIN" // 자동 로그인 (true, false)
-            const val BIOMETRIC_LOGIN = "BIOMETRIC_LOGIN" // 생체 인증로그인
             const val PUSH_ALARM = "PUSH_ALARM" // 푸시 알림 설정
+            const val RE_AGREE_ALARM = "RE_AGREE_ALARM" // 재동의 알림 설정
         }
     }
 

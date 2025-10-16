@@ -125,28 +125,6 @@ class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activ
 
             })
 
-        // 푸시알림 설정
-        addToDisposable(binding.icPushSetting.swcSwitch.checkedChanges()
-            .debounce(100, TimeUnit.MILLISECONDS)
-            .subscribeOn(AndroidSchedulers.mainThread())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe {
-                if (binding.viewModel?.getIsChangeReady() == true) {
-                    val userId = appInfo.getLoginInfo()?.userId ?: ""
-                    if (isLoginCheck(binding.viewModel?.onMemberInfo?.value)) {
-                        binding.viewModel?.postUpdatePushKey(userId = userId, switch1 = EnumApp.FlagYN.flagByBoolean(it))
-                    } else {
-                        // 로그인 전
-                        if (it) {
-                            binding.icPushSetting.swcSwitch.isChecked = false
-                        } else {
-                            showAlertOK(message = getString(R.string.available_after_logging_in))
-                        }
-                    }
-                }
-
-            })
-
         // 흔들어열기 설정
         addToDisposable(binding.icShakeSetting.swcSwitch.checkedChanges()
             .debounce(100, TimeUnit.MILLISECONDS)
@@ -225,6 +203,46 @@ class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activ
             }
             R.id.ivBarcode -> {
                 Logger.d("ivBarcode")
+            }
+            R.id.icPush1 -> {
+                val isPush1Bool = binding.icPush1.checkbox.isActivated
+                val isPush2Bool = binding.icPush2.checkbox.isActivated
+                val userId = appInfo.getLoginInfo()?.userId ?: ""
+                if (isLoginCheck(binding.viewModel?.onMemberInfo?.value)) {
+                    if (isPush1Bool) {
+                        binding.viewModel?.updatePushAlarm(false)
+                    } else {
+                        binding.viewModel?.updatePushAlarm(true)
+                    }
+                    binding.viewModel?.postUpdatePushKey(userId = userId, push1Yn = EnumApp.FlagYN.flagByBoolean(!isPush1Bool), push2Yn = EnumApp.FlagYN.flagByBoolean(isPush2Bool))
+                } else {
+                    // 로그인 전
+                    if (isPush1Bool) {
+                        binding.viewModel?.updatePushAlarm(false)
+                    } else {
+                        showAlertOK(message = getString(R.string.available_after_logging_in))
+                    }
+                }
+            }
+            R.id.icPush2 -> {
+                val isPush1Bool = binding.icPush1.checkbox.isActivated
+                val isPush2Bool = binding.icPush2.checkbox.isActivated
+                val userId = appInfo.getLoginInfo()?.userId ?: ""
+                if (isLoginCheck(binding.viewModel?.onMemberInfo?.value)) {
+                    if (isPush2Bool) {
+                        binding.viewModel?.updateReAgreeAlarm(false)
+                    } else {
+                        binding.viewModel?.updateReAgreeAlarm(true)
+                    }
+                    binding.viewModel?.postUpdatePushKey(userId = userId, push1Yn = EnumApp.FlagYN.flagByBoolean(isPush1Bool), push2Yn = EnumApp.FlagYN.flagByBoolean(!isPush2Bool))
+                } else {
+                    // 로그인 전
+                    if (isPush2Bool) {
+                        binding.viewModel?.updateReAgreeAlarm(false)
+                    } else {
+                        showAlertOK(message = getString(R.string.available_after_logging_in))
+                    }
+                }
             }
         }
     }
