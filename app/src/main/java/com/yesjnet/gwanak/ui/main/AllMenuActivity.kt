@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
-import com.yesjnet.gwanak.core.EnumApp
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.eventbus.EBFinish
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
@@ -41,6 +40,9 @@ class AllMenuActivity: BaseAppBarActivity<ActivityAllMenuBinding>(R.layout.activ
             }
             onNavScreen.observe(this@AllMenuActivity) {
                 startScreen(it)
+            }
+            onFinish.observe(this@AllMenuActivity) {
+                finish()
             }
         }
     }

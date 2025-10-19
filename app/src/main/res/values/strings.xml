@@ -76,6 +76,16 @@
     <string name="login_fail_error">아이디 또는 비밀번호를 다시 확인하세요</string>
     <string name="login_success_msg">로그인 되었습니다.</string>
     <string name="login_error_associate_member_msg">도서관 정회원만 이용 가능합니다.</string>
+    <string name="loan_available">대출가능</string>
+    <string name="login_after_mobile_card_format">%s 님 반갑습니다.</string>
+    <string name="my">본인</string>
+    <string name="family_format">가족%d</string>
+    <string name="my_usage_status">나의이용현황</string>
+    <string name="book_loan_status">도서대출현황</string>
+    <string name="reserved_book_status">예약도서현황</string>
+    <string name="interlibrary_loan_inquiry">상호대차조회</string>
+    <string name="requested_book_inquiry">희망도서조회</string>
+    <string name="current_situation_format">%d/%d</string>
 
     <!-- 설정 -->
     <string name="account">계정</string>

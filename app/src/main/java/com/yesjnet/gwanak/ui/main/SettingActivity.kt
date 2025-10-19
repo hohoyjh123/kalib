@@ -2,11 +2,8 @@ package com.yesjnet.gwanak.ui.main
 
 import android.content.Intent
 import android.os.Build
-import android.provider.Settings
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
-import androidx.biometric.BiometricManager
 import androidx.databinding.BindingAdapter
 import com.jakewharton.rxbinding3.widget.checkedChanges
 import com.orhanobut.logger.Logger
@@ -24,13 +21,10 @@ import com.yesjnet.gwanak.extension.bindSetDrawable
 import com.yesjnet.gwanak.extension.copyClipboard
 import com.yesjnet.gwanak.extension.getColorCompat
 import com.yesjnet.gwanak.extension.gone
-import com.yesjnet.gwanak.extension.show
-import com.yesjnet.gwanak.extension.showAlertConfirm
 import com.yesjnet.gwanak.extension.showAlertOK
 import com.yesjnet.gwanak.extension.showToast
 import com.yesjnet.gwanak.storage.SecurePreference
 import com.yesjnet.gwanak.ui.base.BaseAppBarActivity
-import com.yesjnet.gwanak.ui.base.BaseDialogFragment
 import com.yesjnet.gwanak.ui.startScreen
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.CoroutineScope

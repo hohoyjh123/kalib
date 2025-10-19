@@ -15,6 +15,7 @@ import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.DeviceInfo
 import com.yesjnet.gwanak.data.model.Family
 import com.yesjnet.gwanak.data.model.MemberInfo
+import com.yesjnet.gwanak.data.model.eventbus.EBLogout
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.data.net.APIResource
 import com.yesjnet.gwanak.data.net.APIResult
@@ -91,10 +92,15 @@ class LoginViewModel(
         get() = inAutoLogin
     private val inAutoLogin: MutableLiveData<Boolean> = MutableLiveData()
 
+    // 모바일회원증 정보
+    val onMobileProfileArr: MutableLiveData<ArrayList<Family>>
+        get() = inMobileProfileArr
+    private val inMobileProfileArr: MutableLiveData<ArrayList<Family>> = MutableLiveData()
+
     init {
-        // todo 자동로그인 캐시 활용
         inAutoLogin.value = false
         userInfo.getMember()?.let { updateMemberInfo(it) }
+        inMobileProfileArr.value = getFamilyList(userInfo.getMember())
 
         val userId = pref.getStrValue(ConstsData.PrefCode.DEFAULT_USER_ID, "")
         val userPwd = pref.getStrValue(ConstsData.PrefCode.DEFAULT_USER_PWD, "")
@@ -104,10 +110,34 @@ class LoginViewModel(
 
     fun updateMemberInfo(memberInfo: MemberInfo?) {
         this.inMemberInfo.value = memberInfo
+        inMobileProfileArr.value = getFamilyList(memberInfo)
     }
 
     fun updateAutoLogin(autoLogin: Boolean) {
         inAutoLogin.postValue(autoLogin)
+    }
+
+    private fun getFamilyList(memberInfo: MemberInfo?): ArrayList<Family> {
+        val familyArr: ArrayList<Family> = memberInfo?.let { member ->
+            if (member.familyMemberList.size > 0) {
+                val items: ArrayList<Family> = arrayListOf()
+                member.familyMemberList.forEach {
+                    val isMy = member.userNo == it.familyUserNo
+                    items.add(Family(familyUserNo = it.familyUserNo, familyName = it.familyName, isMy = isMy))
+                }
+                items
+            } else {
+                arrayListOf(Family(
+                    familyUserNo = member.userNo,
+                    familyName = member.name,
+                    isMy = true)
+                )
+            }
+        } ?: run {
+            arrayListOf()
+        }
+
+        return familyArr
     }
 
     fun clearIdPwd() {
@@ -219,6 +249,13 @@ class LoginViewModel(
     }
 
     /**
+     * 로그아웃 클릭 이벤트
+     */
+    fun onClickLogout(memberInfo: MemberInfo) {
+        postAppLogout(memberInfo)
+    }
+
+    /**
      * 로그인 api
      * @param id 아이디
      * @param pwd 비밀번호
@@ -252,6 +289,45 @@ class LoginViewModel(
                     }
                 } else {
                     inShowMsgDialog.value = application.getString(R.string.login_fail_error)
+                }
+            }
+
+            override fun onError(errorResource: ErrorResource) {
+                inErrorResource.value = errorResource
+            }
+
+        })
+        call.enqueue(response)
+    }
+
+    /**
+     * 로그아웃 api
+     */
+    private fun postAppLogout(memberInfo: MemberInfo) {
+        val params = mutableMapOf<String, String>().apply {
+            this[ConstsData.ReqParam.FCM] = appInfo.getFCMDeviceToken()
+            this[ConstsData.ReqParam.USER_KEY] = memberInfo.recKey.toString()
+        }
+        Logger.d("params = $params")
+        val call = memberRepo.postAppLogout(params)
+        val response = Response.create(call, object : APIResult<DeviceInfo> {
+            override fun onLoading(isLoading: Boolean) {
+                inDataLoading.value = isLoading
+            }
+
+            override fun onSuccess(resource: APIResource<DeviceInfo>) {
+                Logger.d("resource = $resource")
+                if (EnumApp.FlagYN.booleanByStatus(resource.resBase.flag)) {
+                    val loginInfo = appInfo.getLoginInfo()
+                    loginInfo?.let {
+                        pref.setStrValue(ConstsData.PrefCode.DEFAULT_USER_ID, it.userId)
+                        pref.setStrValue(ConstsData.PrefCode.DEFAULT_USER_PWD, it.userPwd)
+                        EventBus.getDefault().post(EBLogout(it.userId, it.userPwd))
+
+                        inBindId.value = it.userId
+                        inBindPwd.value = it.userPwd
+                    }
+                    logout()
                 }
             }
 

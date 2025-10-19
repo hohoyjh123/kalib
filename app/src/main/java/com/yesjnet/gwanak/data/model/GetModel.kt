@@ -34,6 +34,7 @@ data class PushInfo(
  * 회원 정보
  */
 data class MemberInfo(
+    @SerializedName("familyMemberList") val familyMemberList: ArrayList<Family> = arrayListOf(),
     @SerializedName("flag") val flag: String = "",
     @SerializedName("klMemberYn") val klMemberYn: String = "",
     @SerializedName("loanStopDate") val loanStopDate: String? = null,
@@ -47,7 +48,9 @@ data class MemberInfo(
     @SerializedName("userClassCode") val userClassCode: String = "",
     @SerializedName("userId") val userId: String = "",
     @SerializedName("userNo") val userNo: String = "",
-    @SerializedName("userPositionCode") val userPositionCode: String = ""
+    @SerializedName("userPositionCode") val userPositionCode: String = "",
+    @SerializedName("familyUserNo") val familyUserNo: String = "",
+    @SerializedName("familyMemberYn") val familyMemberYn: String = ""
 ): Serializable
 
 /**
@@ -59,15 +62,9 @@ data class LoginInfo(
 )
 
 data class Family(
-    @SerializedName("loanStopEndDate") val loanStopEndDate: String = "",
-    @SerializedName("userId") val userId: String = "",
-    @SerializedName("userKey") val userKey: String = "",
-    @SerializedName("userName") val userName: String = "",
-    @SerializedName("userNo") val userNo: String = "",
-    @SerializedName("userStatus") val userStatus: String = "",
-    @SerializedName("userPositionCode") var loanNoShow: Boolean = false,
-    @SerializedName("loanCount") val loanCount: Int = 0,
-    @SerializedName("possibleLoanCount") val possibleLoanCount: Int = 0
+    @SerializedName("familyUserNo") val familyUserNo: String = "",
+    @SerializedName("familyName") val familyName: String = "",
+    @SerializedName("isMy") var isMy: Boolean = true // 본인 여부 (true - 본인, false - 가족)
 ): Serializable
 
 data class Holiday(

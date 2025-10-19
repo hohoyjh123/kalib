@@ -1,25 +1,36 @@
 package com.yesjnet.gwanak.ui.main
 
+import android.graphics.Typeface
 import android.os.Build
 import android.text.Editable
 import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.yesjnet.gwanak.BuildConfig
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
 import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
 import com.yesjnet.gwanak.core.UserInfo
+import com.yesjnet.gwanak.data.model.Family
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.eventbus.EBFinish
 import com.yesjnet.gwanak.data.model.eventbus.EBMainPageEvent
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.databinding.ActivityLoginBinding
 import com.yesjnet.gwanak.extension.OnSingleClickListener
+import com.yesjnet.gwanak.extension.bindChangeTextStyle
+import com.yesjnet.gwanak.extension.bindSetDrawable
 import com.yesjnet.gwanak.extension.copyClipboard
+import com.yesjnet.gwanak.extension.getColorCompat
+import com.yesjnet.gwanak.extension.getString
+import com.yesjnet.gwanak.extension.gone
 import com.yesjnet.gwanak.extension.hideKeyboard
+import com.yesjnet.gwanak.extension.pixelFromDP
+import com.yesjnet.gwanak.extension.show
 import com.yesjnet.gwanak.extension.showAlertOK
 import com.yesjnet.gwanak.extension.showToast
 import com.yesjnet.gwanak.storage.SecurePreference
@@ -44,9 +55,26 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
         binding.viewModel = getViewModel()
         binding.lifecycleOwner = this
         binding.activity = this
+        binding.viewModel?.saveFirebaseInstanceToken()
         EventBus.getDefault().register(this)
-//        initIdPwdRegular()
-        initHeader(EnumApp.AppBarStyle.BACK_TITLE, getString(R.string.login_title), backClick = { onBackPressed() })
+        initAdapter()
+//        initHeader(EnumApp.AppBarStyle.BACK_TITLE, getString(R.string.login_title), backClick = { onBackPressed() })
+
+        val memberInfo = userInfo.getMember()
+        val headerStr = if (memberInfo?.userNo.isNullOrEmpty()) {
+            getString(R.string.login_title)
+        } else {
+            getString(R.string.mobile_membership_card)
+        }
+
+        if (BuildConfig.DEBUG) {
+            binding.clFcm.show()
+        } else {
+            binding.clFcm.gone()
+        }
+
+        initHeader(EnumApp.AppBarStyle.BACK_TITLE, headerStr)
+
     }
 
     override fun onBackPressed() {
@@ -83,9 +111,18 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
             }
 
             onMemberInfo.observe(this@LoginActivity) {
-//                updateTitle(it.userNo)
+                updateTitle(it.userNo)
                 binding.etId.hideKeyboard()
                 binding.etPwd.hideKeyboard()
+            }
+
+            // 오른쪽 화살표 클릭
+            onLeftClick.observe(this@LoginActivity) {
+                binding.vpMain.currentItem -= 1
+            }
+            // 왼쪽 화살표 클릭
+            onRightClick.observe(this@LoginActivity) {
+                binding.vpMain.currentItem += 1
             }
 
             onCopyFcmToken.observe(this@LoginActivity) {
@@ -134,11 +171,6 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
     override fun onDestroy() {
         super.onDestroy()
         EventBus.getDefault().unregister(this)
-
-        // Stop the updates when the activity is destroyed
-//        for (i in 0 until (binding.vpMain.adapter as MembershipProfileAdapter).itemCount) {
-//            ((binding.vpMain[0] as RecyclerView).findViewHolderForAdapterPosition(i) as? MembershipProfileAdapter.ItemViewHolder)?.stopUpdates(i)
-//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -158,8 +190,13 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
                 } else {
                     binding.viewModel?.updateAutoLogin(true)
                 }
-//                binding.icAutoLogin.checkbox.isActivated = binding.icAutoLogin.checkbox.isActivated.not()
             }
+        }
+    }
+
+    private fun initAdapter() {
+        binding.vpMain.apply {
+            adapter = LoginAdapter(binding.viewModel, this@LoginActivity)
         }
     }
 
@@ -188,12 +225,52 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
         binding.etPwd.filters = arrayOf(pwFilter)
     }
 
+    /**
+     * title 업데이트
+     */
+    private fun updateTitle(title: String) {
+        if (title.isEmpty()) {
+            setTitle(getString(R.string.login_title))
+        } else {
+            setTitle(getString(R.string.mobile_membership_card))
+        }
+    }
+
     companion object {
         @BindingAdapter("bindActivated")
         @JvmStatic
         fun ImageView.bindActivated(activated: Boolean?) {
             activated?.let {
                 this.isActivated = it
+            }
+        }
+
+        @BindingAdapter("bindCardStatus", "position")
+        @JvmStatic
+        fun TextView.bindCardStatus(item: Family?, position: Int) {
+            item?.let {
+                if (it.isMy) {
+                    this.text = this.context.getString(R.string.my)
+                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.primary_color), cornerAll = this.context.pixelFromDP(9))
+                } else {
+                    this.text = String.format(this.context.getString(R.string.family_format), position)
+                    this.bindSetDrawable(bgColor = this.context.getColorCompat(R.color.color_6150C5), cornerAll = this.context.pixelFromDP(9))
+                }
+            }
+        }
+
+        @BindingAdapter("bindCardName")
+        @JvmStatic
+        fun TextView.bindCardName(item: Family?) {
+            item?.let {
+                val fullStr = String.format(this.getString(R.string.login_after_mobile_card_format), it.familyName)
+                bindChangeTextStyle(
+                    fullStr = fullStr,
+                    changeStr = it.familyName,
+                    changeColor = this.context.getColorCompat(R.color.white),
+                    changeSize = this.context.pixelFromDP(20),
+                    styleType = Typeface.BOLD
+                )
             }
         }
     }

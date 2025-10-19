@@ -18,7 +18,6 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
@@ -29,11 +28,9 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.EnumApp
-import com.yesjnet.gwanak.data.model.CulturalProgram
 import com.yesjnet.gwanak.data.model.Family
 import com.yesjnet.gwanak.data.model.HolidayItem
-import com.yesjnet.gwanak.data.model.NoticeItem
-import com.yesjnet.gwanak.data.model.RecommendBook
+import com.yesjnet.gwanak.ui.main.LoginAdapter
 import com.yesjnet.gwanak.ui.widget.CornerRadii
 import com.yesjnet.gwanak.ui.widget.DrawableShape
 import com.yesjnet.gwanak.ui.widget.setDrawable
@@ -391,7 +388,7 @@ fun bindStringForamt(textView: TextView, fullStr: String, formatStr: String?) {
 
 // 특정 문자열 색상 & 스타일 변경
 @BindingAdapter(
-    value = ["bindChangeTextStyle", "isFormat", "changeStr", "startIndex", "changeColor", "styleType", "isUnderLine", "fullUnderLine"],
+    value = ["bindChangeTextStyle", "isFormat", "changeStr", "startIndex", "changeColor", "chaneSize", "styleType", "isUnderLine", "fullUnderLine"],
     requireAll = false
 )
 fun TextView.bindChangeTextStyle(
@@ -400,6 +397,7 @@ fun TextView.bindChangeTextStyle(
     changeStr: String?,
     startIndex: Int = -1,
     changeColor: Int,
+    changeSize: Int = -1,
     styleType: Int,
     isUnderLine: Boolean? = null,
     fullUnderLine: Boolean? = null,
@@ -412,6 +410,7 @@ fun TextView.bindChangeTextStyle(
             fullStr,
             str,
             startIndex,
+            size = changeSize,
             color = changeColor,
             styleType = styleType,
             isUnderLine = isUnder,
@@ -458,3 +457,12 @@ fun TextView.bindLibClose(item: HolidayItem?) {
     }
 }
 
+@BindingAdapter("bindMobileProfile")
+fun bindMobileProfile(viewpager2: ViewPager2, data: ArrayList<Family>?) {
+    when (viewpager2.adapter) {
+        is LoginAdapter -> {
+            val adapter = (viewpager2.adapter as LoginAdapter)
+            adapter.setDataNullable(data)
+        }
+    }
+}

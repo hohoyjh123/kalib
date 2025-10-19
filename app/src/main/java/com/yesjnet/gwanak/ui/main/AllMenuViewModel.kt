@@ -1,25 +1,19 @@
 package com.yesjnet.gwanak.ui.main
 
-import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.core.AppInfo
-import com.yesjnet.gwanak.core.ConstsApp
-import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
 import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.MemberInfo
+import com.yesjnet.gwanak.data.model.PushData
 import com.yesjnet.gwanak.data.model.eventbus.EBFinish
-import com.yesjnet.gwanak.extension.hasPermission
 import com.yesjnet.gwanak.storage.SecurePreference
 import com.yesjnet.gwanak.ui.NavScreen
 import com.yesjnet.gwanak.ui.ScreenInfo
 import com.yesjnet.gwanak.ui.base.BaseViewModel
-import com.yesjnet.gwanak.util.GpsUtil
-import com.yesjnet.gwanak.util.PermissionUtil
 import org.greenrobot.eventbus.EventBus
-import java.net.URLEncoder
 
 class AllMenuViewModel(
     private val application: GAApplication,
@@ -351,8 +345,30 @@ class AllMenuViewModel(
 //            NavScreen.AlarmSetting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
 //        }
 //    }
-    fun onClickTest() {
-        Logger.d("")
+    fun onClickMenu(webType: EnumApp.WebType?) {
+        webType?.let { type ->
+            Logger.d("webType = ${type.name} url = ${type.webViewUrl}" )
+            when (type) {
+                // 로그인
+                EnumApp.WebType.LOGIN -> {
+                    inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+                }
+                // 모바일 회원증
+                EnumApp.WebType.MOBILE_MEMBERSHIP_CARD -> {
+                    inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+                }
+                // 앱설정
+                EnumApp.WebType.APP_SETTINGS -> {
+                    inNaviScreen.value = NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+                }
+                else -> {
+                    val pushData = PushData(title = "", message = "", url = type.webViewUrl)
+                    EventBus.getDefault().post(pushData)
+                    EventBus.getDefault().post(EBFinish(true))
+                }
+            }
+        }
+
     }
 
 }
