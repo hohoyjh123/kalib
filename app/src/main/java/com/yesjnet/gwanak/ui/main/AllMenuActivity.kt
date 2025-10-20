@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
+import com.yesjnet.gwanak.core.EnumApp
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.eventbus.EBFinish
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
@@ -15,7 +16,10 @@ import com.yesjnet.gwanak.extension.bindChangeTextStyle
 import com.yesjnet.gwanak.extension.getColorCompat
 import com.yesjnet.gwanak.extension.getString
 import com.yesjnet.gwanak.extension.showAlertOK
+import com.yesjnet.gwanak.ui.NavScreen
+import com.yesjnet.gwanak.ui.ScreenInfo
 import com.yesjnet.gwanak.ui.base.BaseAppBarActivity
+import com.yesjnet.gwanak.ui.base.BaseDialogFragment
 import com.yesjnet.gwanak.ui.startScreen
 import com.yesjnet.gwanak.util.GpsUtil
 import org.greenrobot.eventbus.EventBus
@@ -43,6 +47,13 @@ class AllMenuActivity: BaseAppBarActivity<ActivityAllMenuBinding>(R.layout.activ
             }
             onFinish.observe(this@AllMenuActivity) {
                 finish()
+            }
+            onLoginError.observe(this@AllMenuActivity) {
+                showAlertOK(message = getString(R.string.available_after_logging_in), okListener = object : BaseDialogFragment.MyOnClickListener {
+                    override fun onClick(obj: Any?) {
+                        startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+                    }
+                })
             }
         }
     }

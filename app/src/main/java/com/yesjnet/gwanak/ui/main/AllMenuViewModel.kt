@@ -2,7 +2,9 @@ package com.yesjnet.gwanak.ui.main
 
 import androidx.lifecycle.MutableLiveData
 import com.orhanobut.logger.Logger
+import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
+import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
 import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.core.UserInfo
@@ -14,6 +16,7 @@ import com.yesjnet.gwanak.ui.NavScreen
 import com.yesjnet.gwanak.ui.ScreenInfo
 import com.yesjnet.gwanak.ui.base.BaseViewModel
 import org.greenrobot.eventbus.EventBus
+import java.net.URLEncoder
 
 class AllMenuViewModel(
     private val application: GAApplication,
@@ -26,6 +29,11 @@ class AllMenuViewModel(
     val onMemberInfo: MutableLiveData<MemberInfo>
         get() = inMemberInfo
     private val inMemberInfo: MutableLiveData<MemberInfo> = MutableLiveData()
+
+    // 미로그인
+    val onLoginError: MutableLiveData<String>
+        get() = inLoginError
+    private val inLoginError: MutableLiveData<String> = MutableLiveData()
 
     init {
         inMemberInfo.value = userInfo.getMember()
@@ -362,9 +370,16 @@ class AllMenuViewModel(
                     inNaviScreen.value = NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
                 }
                 else -> {
-                    val pushData = PushData(title = "", message = "", url = type.webViewUrl)
-                    EventBus.getDefault().post(pushData)
-                    EventBus.getDefault().post(EBFinish(true))
+                    val memberInfo = onMemberInfo.value
+                    if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
+                        inLoginError.value = GAApplication.app.getString(R.string.available_after_logging_in)
+                    } else {
+                        val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/member/appReLogin.do?userId=${URLEncoder.encode(memberInfo.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
+                        val pushData = PushData(title = "", message = "", url = type.webViewUrl)
+                        EventBus.getDefault().post(pushData)
+                        EventBus.getDefault().post(EBFinish(true))
+                    }
+
                 }
             }
         }
