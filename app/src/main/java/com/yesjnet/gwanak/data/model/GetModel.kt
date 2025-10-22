@@ -52,7 +52,11 @@ data class MemberInfo(
     @SerializedName("userPositionCode") val userPositionCode: String? = null,
     @SerializedName("familyUserNo") val familyUserNo: String = "",
     @SerializedName("familyMemberYn") val familyMemberYn: String = "",
-    @SerializedName("uLibraryEndDate") val uLibraryEndDate: String? = null
+    @SerializedName("uLibraryEndDate") val uLibraryEndDate: String? = null,
+    @SerializedName("loanBookCnt") val loanBookCnt: Int = 0,
+    @SerializedName("reservationBookCnt") val reservationBookCnt: Int = 0,
+    @SerializedName("dooraeBookCnt") val dooraeBookCnt: Int = 0,
+    @SerializedName("hopeBookApplyCnt") val hopeBookApplyCnt: Int = 0,
 ): Serializable
 
 /**

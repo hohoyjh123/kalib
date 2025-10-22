@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
+import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.BuildConfig
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.AppInfo
@@ -182,6 +183,12 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEventFinish(ebFinish: EBFinish) {
+        Logger.d("allMenuActivity finish")
+        finish()
+    }
+
     override fun onSingleClick(view: View) {
         when (view.id) {
             R.id.icAutoLogin -> {
@@ -271,6 +278,14 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
                     changeSize = this.context.pixelFromDP(20),
                     styleType = Typeface.BOLD
                 )
+            }
+        }
+
+        @BindingAdapter("bindStatusCount", "bindStatusTotal")
+        @JvmStatic
+        fun TextView.bindStatusCount(count: Int?, total: Int) {
+            count?.let {
+                this.text = String.format(this.context.getString(R.string.current_situation_format), it, total)
             }
         }
     }

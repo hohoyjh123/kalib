@@ -15,6 +15,8 @@ import com.yesjnet.gwanak.core.UserInfo
 import com.yesjnet.gwanak.data.model.DeviceInfo
 import com.yesjnet.gwanak.data.model.Family
 import com.yesjnet.gwanak.data.model.MemberInfo
+import com.yesjnet.gwanak.data.model.PushData
+import com.yesjnet.gwanak.data.model.eventbus.EBFinish
 import com.yesjnet.gwanak.data.model.eventbus.EBLogout
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.data.net.APIResource
@@ -28,6 +30,7 @@ import com.yesjnet.gwanak.storage.SecurePreference
 import com.yesjnet.gwanak.ui.base.BaseViewModel
 import com.yesjnet.gwanak.util.PermissionUtil
 import org.greenrobot.eventbus.EventBus
+import java.net.URLEncoder
 
 /**
  * 회원증 뷰모델
@@ -253,6 +256,16 @@ class LoginViewModel(
      */
     fun onClickLogout(memberInfo: MemberInfo) {
         postAppLogout(memberInfo)
+    }
+
+    fun onClickMyUsageStatus(webType: EnumApp.WebType?) {
+        webType?.let { type ->
+            val memberInfo = onMemberInfo.value
+            val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/member/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
+            val pushData = PushData(title = "", message = "", url = type.webViewUrl)
+            EventBus.getDefault().post(pushData)
+            EventBus.getDefault().post(EBFinish(true))
+        }
     }
 
     /**

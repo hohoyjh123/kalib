@@ -26,13 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/white">
-            <include
-                android:id="@+id/icTopArea"
-                layout="@layout/layout_top_area"
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                app:listener="@{activity}" />
-
+            <include android:id="@+id/icTopArea" layout="@layout/layout_top_area" app:listener="@{activity}" />
             <WebView
                 android:id="@+id/wv"
                 android:layout_width="match_parent"
@@ -42,14 +36,12 @@
                 app:layout_constraintBottom_toTopOf="@id/icMainBottom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
-
             <include
                 layout="@layout/layout_loading"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:show="@{viewModel.onDataProgress}"
                 app:listener="@{listener}" />
-
             <include
                 android:id="@+id/icMainBottom"
                 layout="@layout/layout_main_bottom"

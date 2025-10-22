@@ -176,7 +176,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
             onMemberInfo.observe(this@MainActivity) {
                 Logger.d("mainactivity memberinfo")
                 // 자동로그인 개인쟁보재동의 N 인 경우 재동의 페이지 이동
-                if (!EnumApp.FlagYN.booleanByStatus(it.reAgreeYn)) {
+                if (it.userId.isNotEmpty() && !EnumApp.FlagYN.booleanByStatus(it.reAgreeYn)) {
                     setWebView(EnumApp.WebType.RE_AGREE_PERSONAL_INFOMATION, it)
                 }
             }

@@ -6,6 +6,7 @@
     <data>
         <import type="android.view.View"/>
         <import type="android.text.TextUtils"/>
+        <import type="com.yesjnet.gwanak.core.EnumApp"/>
         <variable name="activity" type="com.yesjnet.gwanak.ui.main.LoginActivity"/>
         <variable name="viewModel" type="com.yesjnet.gwanak.ui.main.LoginViewModel"/>
         <variable name="listener" type="com.yesjnet.gwanak.extension.OnSingleClickListener" />
@@ -300,6 +301,108 @@
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <!-- 나의 이용현황 -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/clMyUsageStatus"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        app:layout_constraintTop_toBottomOf="@id/clMobileProfile">
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tvMyUsageStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:textSize="18dp"
+                            android:textColor="@color/color_111111"
+                            android:text="@string/my_usage_status"
+                            android:gravity="center_vertical"
+                            android:fontFamily="@font/style_bold"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/btn_more"
+                            android:onClick="@{() -> viewModel.onClickMyUsageStatus(EnumApp.WebType.MY_LIBRARY)}"
+                            rippleColor="@{@color/ripple_effect}"
+                            app:layout_constraintTop_toTopOf="@id/tvMyUsageStatus"
+                            app:layout_constraintBottom_toBottomOf="@id/tvMyUsageStatus"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:paddingVertical="10dp"
+                            android:paddingHorizontal="12dp"
+                            bgColor="@{@color/color_FFEAF6}"
+                            cornerAll="@{8}"
+                            app:layout_constraintTop_toBottomOf="@id/tvMyUsageStatus"
+                            tools:background="@color/color_FFEAF6">
+                            <include
+                                android:id="@+id/icBookLoanStatus"
+                                layout="@layout/layout_my_usage_status"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                app:value="@{@string/book_loan_status}"
+                                app:count="@{viewModel.onMemberInfo.loanBookCnt}"
+                                app:total="@{5}"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/icReservedBookStatus"/>
+                            <include
+                                android:id="@+id/icReservedBookStatus"
+                                layout="@layout/layout_my_usage_status"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                app:value="@{@string/reserved_book_status}"
+                                app:count="@{viewModel.onMemberInfo.reservationBookCnt}"
+                                app:total="@{5}"
+                                app:layout_constraintTop_toTopOf="@id/icBookLoanStatus"
+                                app:layout_constraintStart_toEndOf="@id/icBookLoanStatus"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+                            <include
+                                android:id="@+id/icInterlibraryLoanInquiry"
+                                layout="@layout/layout_my_usage_status"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                app:value="@{@string/interlibrary_loan_inquiry}"
+                                app:count="@{viewModel.onMemberInfo.dooraeBookCnt}"
+                                app:total="@{5}"
+                                app:layout_constraintTop_toBottomOf="@id/icBookLoanStatus"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintEnd_toStartOf="@id/icRequestedBookInquiry"/>
+                            <include
+                                android:id="@+id/icRequestedBookInquiry"
+                                layout="@layout/layout_my_usage_status"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                app:value="@{@string/requested_book_inquiry}"
+                                app:count="@{viewModel.onMemberInfo.hopeBookApplyCnt}"
+                                app:total="@{12}"
+                                app:layout_constraintTop_toTopOf="@id/icInterlibraryLoanInquiry"
+                                app:layout_constraintStart_toEndOf="@id/icInterlibraryLoanInquiry"
+                                app:layout_constraintEnd_toEndOf="parent"/>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btLogout"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="20dp"
+                        android:textSize="18dp"
+                        android:textColor="@color/color_222222"
+                        android:fontFamily="@font/noto_sans_kr_medium"
+                        android:text="@string/logout"
+                        android:onClick="@{() -> viewModel.onClickLogout(viewModel.onMemberInfo)}"
+                        bgColor="@{@color/white}"
+                        cornerAll="@{5}"
+                        stroke="@{1}"
+                        strokeColor="@{@color/color_898989}"
+                        rippleColor="@{@color/ripple_effect}"
+                        app:layout_constraintTop_toBottomOf="@id/clMyUsageStatus"/>
+
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/clFcm"
                         android:layout_width="match_parent"
@@ -308,7 +411,8 @@
                         android:orientation="vertical"
                         android:layout_margin="16dp"
                         android:visibility="gone"
-                        app:layout_constraintTop_toBottomOf="@id/clMobileProfile">
+                        app:layout_constraintTop_toBottomOf="@id/btLogout"
+                        tools:visibility="visible">
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -327,22 +431,6 @@
                             android:onClick="@{() -> viewModel.onFcmCopyClick(viewModel.onFcmToken)}"
                             rippleColor="@{@color/ripple_effect}"/>
                     </androidx.appcompat.widget.LinearLayoutCompat>
-                    <androidx.appcompat.widget.AppCompatButton
-                        android:id="@+id/btLogout"
-                        android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:layout_marginTop="20dp"
-                        android:textSize="18dp"
-                        android:textColor="@color/color_222222"
-                        android:fontFamily="@font/noto_sans_kr_medium"
-                        android:text="@string/logout"
-                        android:onClick="@{() -> viewModel.onClickLogout(viewModel.onMemberInfo)}"
-                        bgColor="@{@color/white}"
-                        cornerAll="@{5}"
-                        stroke="@{1}"
-                        strokeColor="@{@color/color_898989}"
-                        rippleColor="@{@color/ripple_effect}"
-                        app:layout_constraintTop_toBottomOf="@id/clFcm"/>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
