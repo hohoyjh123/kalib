@@ -128,7 +128,7 @@ class LoginViewModel(
                 items
             } else {
                 arrayListOf(Family(
-                    familyUserNo = member.userNo,
+                    familyUserNo = member.userNo ?: "",
                     familyName = member.name,
                     isMy = true)
                 )

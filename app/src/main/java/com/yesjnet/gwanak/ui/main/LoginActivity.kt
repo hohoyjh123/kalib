@@ -61,7 +61,7 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
 //        initHeader(EnumApp.AppBarStyle.BACK_TITLE, getString(R.string.login_title), backClick = { onBackPressed() })
 
         val memberInfo = userInfo.getMember()
-        val headerStr = if (memberInfo?.userNo.isNullOrEmpty()) {
+        val headerStr = if (memberInfo?.userId.isNullOrEmpty()) {
             getString(R.string.login_title)
         } else {
             getString(R.string.mobile_membership_card)
@@ -111,7 +111,7 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
             }
 
             onMemberInfo.observe(this@LoginActivity) {
-                updateTitle(it.userNo)
+                updateTitle(it.userId)
                 binding.etId.hideKeyboard()
                 binding.etPwd.hideKeyboard()
             }
@@ -228,8 +228,8 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
     /**
      * title 업데이트
      */
-    private fun updateTitle(title: String) {
-        if (title.isEmpty()) {
+    private fun updateTitle(title: String? = null) {
+        if (title.isNullOrEmpty()) {
             setTitle(getString(R.string.login_title))
         } else {
             setTitle(getString(R.string.mobile_membership_card))

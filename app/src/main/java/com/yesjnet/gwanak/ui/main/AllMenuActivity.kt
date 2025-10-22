@@ -71,7 +71,7 @@ class AllMenuActivity: BaseAppBarActivity<ActivityAllMenuBinding>(R.layout.activ
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEventMemberInfo(event: EBMemberInfo) {
-        if (event.memberInfo.userNo.isNullOrEmpty()) {
+        if (event.memberInfo.userId.isNullOrEmpty()) {
             binding.viewModel?.updateMemberInfo(MemberInfo())
         } else {
             binding.viewModel?.updateMemberInfo(event.memberInfo)
@@ -82,7 +82,7 @@ class AllMenuActivity: BaseAppBarActivity<ActivityAllMenuBinding>(R.layout.activ
         @BindingAdapter("bindLoginInfo")
         @JvmStatic
         fun TextView.bindLoginInfo(memberInfo: MemberInfo?) {
-            if (memberInfo?.userNo.isNullOrEmpty()) {
+            if (memberInfo?.userId.isNullOrEmpty()) {
                 // 비 로그인
                 val fullStr = this.getString(R.string.login_before_message)
                 bindChangeTextStyle(

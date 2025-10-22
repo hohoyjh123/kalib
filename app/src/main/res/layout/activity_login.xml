@@ -29,7 +29,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="16dp"
-                    android:visibility="@{TextUtils.isEmpty(viewModel.onMemberInfo.userNo) ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.onMemberInfo.userId) ? View.VISIBLE : View.GONE}"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="gone">
                     <TextView
@@ -202,7 +202,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:paddingHorizontal="16dp"
-                    android:visibility="@{TextUtils.isEmpty(viewModel.onMemberInfo.userNo) ? View.GONE : View.VISIBLE}"
+                    android:visibility="@{TextUtils.isEmpty(viewModel.onMemberInfo.userId) ? View.GONE : View.VISIBLE}"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:visibility="visible">
                     <androidx.constraintlayout.widget.ConstraintLayout

@@ -204,8 +204,8 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
         if (accel > 12) { // 특정 값을 넘으면 흔들림으로 간주
             val isShake = pref.getConfigBool(ConstsData.PrefCode.SHAKE_FLAG, false)
             if (isShake) {
-                val userNo = binding.viewModel?.onMemberInfo?.value?.userNo ?: ""
-                if (userNo.isNullOrEmpty()) {
+                val userId = binding.viewModel?.onMemberInfo?.value?.userId ?: ""
+                if (userId.isNullOrEmpty()) {
                     showAlertOK(message = getString(R.string.qrcode_associate_member_error_msg))
                 } else {
                     startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
@@ -598,11 +598,11 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
         if (url.indexOf(EnumApp.WebScheme.OPEN_LOGIN.scheme) >= 0) {
             startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
         } else if (url.indexOf(EnumApp.WebScheme.OPEN_BARCODE.scheme) >= 0) {
-            val userNo = binding.viewModel?.onMemberInfo?.value?.userNo ?: ""
-            if (userNo.isNullOrEmpty()) {
+            val userId = binding.viewModel?.onMemberInfo?.value?.userId ?: ""
+            if (userId.isNullOrEmpty()) {
                 showAlertOK(message = getString(R.string.qrcode_associate_member_error_msg))
             } else {
-                Logger.d("qrcode")
+                startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
             }
         } else if (url.indexOf(EnumApp.WebScheme.APP_SETTING.scheme) >= 0) {
             startScreen(NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))

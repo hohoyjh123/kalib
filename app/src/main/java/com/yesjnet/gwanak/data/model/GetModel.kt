@@ -38,19 +38,21 @@ data class MemberInfo(
     @SerializedName("flag") val flag: String = "",
     @SerializedName("klMemberYn") val klMemberYn: String = "",
     @SerializedName("loanStopDate") val loanStopDate: String? = null,
-    @SerializedName("manageCode") val manageCode: String = "",
+    @SerializedName("manageCode") val manageCode: String? = null,
     @SerializedName("memberClass") val memberClass: String = "",
     @SerializedName("name") val name: String = "",
     @SerializedName("privacyExpireDate") val privacyExpireDate: String = "",
     @SerializedName("reAgreeYn") val reAgreeYn: String = "",
     @SerializedName("recKey") val recKey: Int = 0,
     @SerializedName("userClass") val userClass: String = "",
-    @SerializedName("userClassCode") val userClassCode: String = "",
+    @SerializedName("userClassCode") val userClassCode: String? = null,
+    @SerializedName("illAplStopDate") val illAplStopDate: String? = null,
     @SerializedName("userId") val userId: String = "",
-    @SerializedName("userNo") val userNo: String = "",
-    @SerializedName("userPositionCode") val userPositionCode: String = "",
+    @SerializedName("userNo") val userNo: String? = null,
+    @SerializedName("userPositionCode") val userPositionCode: String? = null,
     @SerializedName("familyUserNo") val familyUserNo: String = "",
-    @SerializedName("familyMemberYn") val familyMemberYn: String = ""
+    @SerializedName("familyMemberYn") val familyMemberYn: String = "",
+    @SerializedName("uLibraryEndDate") val uLibraryEndDate: String? = null
 ): Serializable
 
 /**
