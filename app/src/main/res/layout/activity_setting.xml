@@ -16,17 +16,10 @@
         android:layout_height="match_parent"
         android:background="@color/white">
         <include
-            android:id="@+id/icTopArea"
-            layout="@layout/layout_top_area"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            app:listener="@{activity}" />
-        <include
             android:id="@+id/icHeader"
             layout="@layout/layout_appbar"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            app:layout_constraintTop_toBottomOf="@id/icTopArea" />
+            android:layout_height="55dp" />
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -30,6 +30,7 @@ import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.core.ConstsApp
 import com.yesjnet.gwanak.core.ConstsData
 import com.yesjnet.gwanak.core.EnumApp
+import com.yesjnet.gwanak.core.GAApplication
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.PushData
 import com.yesjnet.gwanak.data.model.eventbus.EBMainPageEvent
@@ -131,7 +132,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
             onNavScreen.observe(this@MainActivity) {
                 startScreen(it)
             }
-            binding.viewModel?.onDataLoading?.observe(this@MainActivity) {
+            onDataLoading.observe(this@MainActivity) {
                 if (!it)
                     binding.srlRefresh.isRefreshing = false
             }
@@ -170,6 +171,15 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
 //                    }
 //                } )
             }
+
+            // 회원정보
+            onMemberInfo.observe(this@MainActivity) {
+                Logger.d("mainactivity memberinfo")
+                // 자동로그인 개인쟁보재동의 N 인 경우 재동의 페이지 이동
+                if (!EnumApp.FlagYN.booleanByStatus(it.reAgreeYn)) {
+                    setWebView(EnumApp.WebType.RE_AGREE_PERSONAL_INFOMATION, it)
+                }
+            }
         }
     }
 
@@ -198,7 +208,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                 if (userNo.isNullOrEmpty()) {
                     showAlertOK(message = getString(R.string.qrcode_associate_member_error_msg))
                 } else {
-                    Logger.d("qrcode")
+                    startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
                 }
             }  // 흔들림 시 QR코드 팝업
         }
@@ -604,12 +614,31 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
     override fun onSingleClick(view: View) {
         when (view.id) {
             R.id.ivBanner -> {
-                Logger.d("ivbanner")
+                val memberInfo = binding.viewModel?.onMemberInfo?.value
+                setWebView(EnumApp.WebType.HOME, memberInfo)
             }
             R.id.ivBarcode -> {
-                Logger.d("ivBarcode")
+                val memberInfo = binding.viewModel?.onMemberInfo?.value
+                if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
+                    loginErrorDialog()
+                } else {
+                    val memberClass = EnumApp.MemberClass.valueOfType(memberInfo.userClass)
+                    if (EnumApp.MemberClass.FULL_MEMBER == memberClass) {
+                        startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+                    } else {
+                        showAlertOK(message = getString(R.string.associate_member_error))
+                    }
+                }
             }
         }
     }
     // webview end
+
+    private fun loginErrorDialog() {
+        showAlertOK(message = getString(R.string.available_after_logging_in), okListener = object : BaseDialogFragment.MyOnClickListener {
+            override fun onClick(obj: Any?) {
+                startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
+            }
+        })
+    }
 }

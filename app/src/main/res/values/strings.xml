@@ -110,4 +110,5 @@
     <string name="biometric_auth_msg">지문 또는 얼굴로 로그인 하세요</string>
     <string name="biometric_cancel_msg">생체인증을 취소하여 메인이로 이동합니다</string>
     <string name="biometric_count_error_msg">5회 인증 실패하여 메인으로 이동합니다</string>
+    <string name="associate_member_error">준회원은 메뉴접근 불가</string>
 </resources>

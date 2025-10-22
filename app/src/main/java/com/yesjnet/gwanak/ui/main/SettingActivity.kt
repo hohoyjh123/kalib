@@ -152,12 +152,6 @@ class SettingActivity: BaseAppBarActivity<ActivitySettingBinding>(R.layout.activ
 
     override fun onSingleClick(view: View) {
         when (view.id) {
-            R.id.ivBanner -> {
-                Logger.d("ivbanner")
-            }
-            R.id.ivBarcode -> {
-                Logger.d("ivBarcode")
-            }
             R.id.icPush1 -> {
                 val isPush1Bool = binding.icPush1.checkbox.isActivated
                 val isPush2Bool = binding.icPush2.checkbox.isActivated
