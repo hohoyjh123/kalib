@@ -57,6 +57,7 @@ import java.io.UnsupportedEncodingException
 import java.net.URLDecoder
 import java.net.URLEncoder
 import kotlin.math.sqrt
+import androidx.core.net.toUri
 
 
 class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_main),
@@ -542,6 +543,27 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                             }
                         }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                return true
+            // 다이얼
+            } else if (url.startsWith("tel:")) {
+                val intent = Intent(Intent.ACTION_DIAL).apply {
+                    data = url.toUri()
+                }
+                view.context?.startActivity(intent)
+                return true
+            // 메일
+            } else if (url.startsWith("mailto:")) {
+                val mailUri = url.toUri()
+                val email = mailUri.schemeSpecificPart // test@naver.com 부분 추출
+                val intent = Intent(Intent.ACTION_SENDTO).apply {
+                    data = "mailto:$email".toUri()
+                    putExtra(Intent.EXTRA_EMAIL, arrayOf(email))
+                }
+                try {
+                    view.context?.startActivity(intent)
                 } catch (e: Exception) {
                     e.printStackTrace()
                 }
