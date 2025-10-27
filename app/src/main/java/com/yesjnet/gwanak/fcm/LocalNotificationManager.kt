@@ -54,7 +54,7 @@ class LocalNotificationManager(
 
                     NotificationCompat.Builder(application, application.getString(R.string.noti_channel_id))
                         .setColor(application.getColorCompat(R.color.notify_color))
-                        .setSmallIcon(R.drawable.small_icon_w)
+                        .setSmallIcon(R.mipmap.small_icon_w)
 //                        .setLargeIcon(
 //                            BitmapFactory.decodeResource(
 //                                application.resources,
