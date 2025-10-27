@@ -87,7 +87,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/small_icon_w" />
+            android:resource="@mipmap/small_icon_w" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/notify_color" />
