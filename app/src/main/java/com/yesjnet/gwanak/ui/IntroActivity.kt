@@ -135,17 +135,4 @@ class IntroActivity: BaseAppBarActivity<ActivityIntroBinding>(R.layout.activity_
         }
     }
 
-    private fun startFlowerAnimation() {
-        // ObjectAnimator를 사용하여 360도 회전 애니메이션 설정
-        val rotationAnimator = ObjectAnimator.ofFloat(binding.ivFlower, "rotation", 0f, 360f).apply {
-            duration = 1200 // 재생시간 1.2초
-            interpolator = AccelerateDecelerateInterpolator() // 서서히 끝내기
-            repeatCount = ObjectAnimator.INFINITE // 무한반복
-            repeatMode = ObjectAnimator.RESTART
-        }
-
-        // 애니메이션 시작
-        rotationAnimator.start()
-    }
-
 }
