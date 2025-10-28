@@ -118,8 +118,9 @@ class EnumApp {
     }
 
     enum class MemberClass(val type: String) {
-        ASSOCIATE_MEMBER("2"),
-        FULL_MEMBER("0");
+        ASSOCIATE_MEMBER("2"), // 준회원
+        SUSPENDED_MEMBER("1"), // 정지회원
+        FULL_MEMBER("0"); // 정회원
 
         companion object {
             fun valueOfType(type: String) : MemberClass {

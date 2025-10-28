@@ -256,6 +256,7 @@
                                 android:text="@string/loan_available"
                                 bgColor="@{@color/color_7F0047}"
                                 cornerAll="@{5}"
+                                bindMobileStatus="@{viewModel.onMemberInfo}"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"

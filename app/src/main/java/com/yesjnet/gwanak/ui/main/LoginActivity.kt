@@ -288,6 +288,43 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
                 this.text = String.format(this.context.getString(R.string.current_situation_format), it, total)
             }
         }
+
+        @BindingAdapter("bindMobileStatus")
+        @JvmStatic
+        fun TextView.bindMobileStatus(item: MemberInfo?) {
+            item?.let {
+                /*
+                userClass = '1' → 대출정지 (~loanStopDate 표시)
+                → 대출정지
+                userClass = '2' → 제적회원
+                → 제적회원
+                userClass ≠ '1' && userClass ≠ '2' && memberClass = '0' && illAplStopDate 있음 → 정회원 + 이용제한 (상호대차 신청 제한)
+                → 상호대차정지
+                userClass ≠ '1' && userClass ≠ '2' && memberClass = '0' && uLibraryVO.endDate 있음 → 정회원 + 이용제한 (U-도서관 신청 제한)
+                → U도서관정지
+                userClass ≠ '1' && userClass ≠ '2' && memberClass = '0' && 제한 없음 → 정회원 (정상)
+                → 대출가능
+                userClass ≠ '1' && userClass ≠ '2' && memberClass = '2' → 준회원
+                → 준회원
+                 */
+                val userClass = it.userClass
+                val memberClass = it.memberClass
+
+                if ("1" == userClass) {
+                    this.text = this.context.getString(R.string.loan_suspension)
+                } else if ("2" == userClass) {
+                    this.text = this.context.getString(R.string.expulsion_of_member)
+                } else if ("1" != userClass && "2" != userClass && "0" == memberClass && !item.illAplStopDate.isNullOrEmpty()) {
+                    this.text = this.context.getString(R.string.interlibrary_loan_suspension)
+                } else if ("1" != userClass && "2" != userClass && "0" == memberClass && item.uLibraryEndDate.isNullOrEmpty()) {
+                    this.text = this.context.getString(R.string.u_library_suspension)
+                } else if ("1" != userClass && "2" != userClass && "0" == memberClass) {
+                    this.text = this.context.getString(R.string.loan_available)
+                } else if ("1" != userClass && "2" != userClass && "2" == memberClass) {
+                    this.text = this.context.getString(R.string.associate_member)
+                }
+            }
+        }
     }
 
 }
