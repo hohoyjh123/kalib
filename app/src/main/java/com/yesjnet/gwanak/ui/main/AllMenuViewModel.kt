@@ -374,8 +374,8 @@ class AllMenuViewModel(
 //                    if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
 //                        inLoginError.value = GAApplication.app.getString(R.string.available_after_logging_in)
 //                    } else {
-                        val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/member/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
-                        val pushData = PushData(title = "", message = "", url = type.webViewUrl)
+                        val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
+                        val pushData = PushData(title = "", message = "", url = webUrl)
                         EventBus.getDefault().post(pushData)
                         EventBus.getDefault().post(EBFinish(true))
 //                    }
