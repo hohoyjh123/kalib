@@ -412,6 +412,9 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
         override fun onProgressChanged(view: WebView, newProgress: Int) {
 //    		super.onProgressChanged(view, newProgress);
 //    		bar.setProgress( (int)(20+ (float)newProgress / 100 * 80));
+            if (newProgress >= 100) {
+                binding.viewModel?.onDataProgress?.value = false
+            }
             Logger.d("WebView progress=$newProgress url=${view.url}")
         }
 
@@ -579,7 +582,11 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                 }
                 return true
             } else {
-                view.loadUrl(url)
+                if ( url == "https://lib.gwanak.go.kr/galib/program/parcelMemberApply.do") {
+                    return false
+                } else {
+                    view.loadUrl(url)
+                }
             }
             return false
         }
