@@ -412,6 +412,7 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
         override fun onProgressChanged(view: WebView, newProgress: Int) {
 //    		super.onProgressChanged(view, newProgress);
 //    		bar.setProgress( (int)(20+ (float)newProgress / 100 * 80));
+            Logger.d("WebView progress=$newProgress url=${view.url}")
         }
 
         // 웹뷰 위치권한
@@ -428,12 +429,20 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
             message: String,
             result: JsResult,
         ): Boolean {
-            Logger.d("jihoon onJsAlert url = $url")
-            showAlertOK(title = getString(R.string.alarm), message = message, okListener = object : BaseDialogFragment.MyOnClickListener {
-                override fun onClick(obj: Any?) {
-                    result.confirm()
+            Logger.d("onJsAlert url=$url message=$message")
+            binding.viewModel?.onDataProgress?.value = false
+
+            showAlertOK(
+                title = getString(R.string.alarm),
+                message = message,
+                okListener = object : BaseDialogFragment.MyOnClickListener {
+                    override fun onClick(obj: Any?) {
+                        view.post { // <- 여기 포인트
+                            result.confirm()
+                        }
+                    }
                 }
-            })
+            )
             return true
         }
     }
@@ -442,12 +451,13 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
     inner class WebViewClient : android.webkit.WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
-//            binding.viewModel?.onDataProgress?.value = true
+            Logger.d("onPageStarted")
+            binding.viewModel?.onDataProgress?.value = true
         }
 
         //        override fun shouldOverrideUrlLoading(view: WebView, url: String?): Boolean {
 //            url?.let { view.loadUrl(it) }
-//            return false
+//            return true
 //        }
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             val url = request.url.toString()
@@ -571,12 +581,13 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
             } else {
                 view.loadUrl(url)
             }
-            return true
+            return false
         }
 
         override fun onPageFinished(view: WebView?, url: String?) {
             super.onPageFinished(view, url)
-            binding.viewModel?.onDataLoading?.value = false
+            Logger.d("onPageFinished")
+//            binding.viewModel?.onDataLoading?.value = false
             binding.viewModel?.onDataProgress?.value = false
         }
     }

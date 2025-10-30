@@ -109,10 +109,18 @@ class CustomDialog(
 
     override fun onClick(v: View) {
         when (v.id) {
-            R.id.btCancel -> cancelClickListener?.onClick(null)
-            R.id.btOk -> okClickListener?.onClick(null)
+            R.id.btCancel -> {
+                cancelClickListener?.onClick(null)
+                dismiss()
+            }
+            R.id.btOk -> {
+                okClickListener?.onClick(null)
+                dismiss()
+            }
+            else -> {
+                dismiss()
+            }
         }
-        dismiss()
     }
 
     override fun onCancel(dialog: DialogInterface) {

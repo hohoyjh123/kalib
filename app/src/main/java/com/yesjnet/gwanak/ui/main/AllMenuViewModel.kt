@@ -63,7 +63,7 @@ class AllMenuViewModel(
      */
     fun onClickMyPage(memberInfo: MemberInfo) {
         Logger.d("onClickMyPage = ${memberInfo.userId}")
-        inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+        onClickMenu(EnumApp.WebType.MY_INFO)
     }
 
 //    /**
@@ -359,27 +359,52 @@ class AllMenuViewModel(
             when (type) {
                 // 로그인
                 EnumApp.WebType.LOGIN -> {
-                    inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
-                }
-                // 모바일 회원증
-                EnumApp.WebType.MOBILE_MEMBERSHIP_CARD -> {
-                    inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+                    val memberInfo = onMemberInfo.value
+                    if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
+                        inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+                    } else {
+                        val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo.userId, "utf-8")}&returnUrl=${URLEncoder.encode(EnumApp.WebType.MY_INFO.webViewUrl, "utf-8")}"
+                        val pushData = PushData(title = "", message = "", url = webUrl)
+                        EventBus.getDefault().post(pushData)
+                        EventBus.getDefault().post(EBFinish(true))
+                    }
                 }
                 // 앱설정
                 EnumApp.WebType.APP_SETTINGS -> {
                     inNaviScreen.value = NavScreen.Setting(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
                 }
-                else -> {
+                // 맘대로택배
+                EnumApp.WebType.FREE_DELIVERY -> {
+                    val pushData = PushData(title = "", message = "", url = webType.webViewUrl)
+                    EventBus.getDefault().post(pushData)
+                    EventBus.getDefault().post(EBFinish(true))
+                }
+                EnumApp.WebType.MY_INFO,
+                EnumApp.WebType.BOOK_USAGE_HISTORY,
+                EnumApp.WebType.INTERLIBRARY_LOAN_REQUEST_HISTORY,
+                EnumApp.WebType.MY_BOOKS_OF_INTEREST,
+                EnumApp.WebType.MY_REQUEST_HISTORY,
+                EnumApp.WebType.REQUEST_FOR_DESIRED_BOOKS,
+                EnumApp.WebType.MOBILE_MEMBERSHIP_CARD,
+                EnumApp.WebType.EDIT_MEMBERSHIP_INFOMATION,
+                EnumApp.WebType.CHANGE_PASSWORD,
+                EnumApp.WebType.RE_AGREE_PERSONAL_INFOMATION -> {
                     val memberInfo = onMemberInfo.value
-//                    if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
-//                        inLoginError.value = GAApplication.app.getString(R.string.available_after_logging_in)
-//                    } else {
-                        val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
+                    if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
+                        inLoginError.value = GAApplication.app.getString(R.string.available_after_logging_in)
+                    } else {
+                        val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
                         val pushData = PushData(title = "", message = "", url = webUrl)
                         EventBus.getDefault().post(pushData)
                         EventBus.getDefault().post(EBFinish(true))
-//                    }
-
+                    }
+                }
+                else -> {
+                    val memberInfo = onMemberInfo.value
+                    val webUrl = "${ConstsData.SERVER_URL_FULL}mobile/api/appReLogin.do?userId=${URLEncoder.encode(memberInfo?.userId, "utf-8")}&returnUrl=${URLEncoder.encode(type.webViewUrl, "utf-8")}"
+                    val pushData = PushData(title = "", message = "", url = webUrl)
+                    EventBus.getDefault().post(pushData)
+                    EventBus.getDefault().post(EBFinish(true))
                 }
             }
         }

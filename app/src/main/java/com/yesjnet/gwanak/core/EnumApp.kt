@@ -147,7 +147,7 @@ class EnumApp {
         FACILITY_INFO("/mobile/liblocation/libLocationList.do"), // 전체메뉴 > 시설정보
         READING_CULTURE_PROGRAM("/mobile/lecture/lectureList.do"), // 전체메뉴 > 독서문화프로그램
         REQUEST_DESIRED_BOOK("/mobile/hopebook/hopeBookInfo.do"), // 전체메뉴 > 희망도서신청
-        FREE_DELIVERY("/mobile/hopebook/parcelInfo.do"), // 전체메뉴 > 맘대로택배
+        FREE_DELIVERY("/mobile/parcel/parcelInfo.do"), // 전체메뉴 > 맘대로택배
         LOAN_FROM_LOCAL_BOOKSTORES("/mobile/contents/baroLoan.do"), // 전체메뉴 > 동네서점바로대출제
         E_BOOKS("/mobile/contents/ebook.do"), // 전체메뉴 > 전자책
         AUDIO_BOOKS("/mobile/contents/audioBook.do"), // 전체메뉴 > 오디오북

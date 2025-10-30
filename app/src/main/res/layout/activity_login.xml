@@ -189,7 +189,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="1dp"
-                        app:value="@{@string/login_caption_1}"
+                        app:value="@{@string/login_caption_2}"
                         app:textColor="@{@color/color_555555}"
                         app:dotColor="@{@drawable/circle_666666}"
                         app:layout_constraintTop_toBottomOf="@+id/icDotInfo1"
