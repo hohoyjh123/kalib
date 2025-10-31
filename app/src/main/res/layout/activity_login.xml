@@ -335,7 +335,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="10dp"
                             android:paddingVertical="10dp"
-                            android:paddingHorizontal="12dp"
+                            android:paddingHorizontal="6dp"
                             bgColor="@{@color/color_FFEAF6}"
                             cornerAll="@{8}"
                             app:layout_constraintTop_toBottomOf="@id/tvMyUsageStatus"
