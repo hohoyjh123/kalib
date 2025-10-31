@@ -500,11 +500,11 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
             // url 마지막에 포함되면 외부 브라우저로 이동처리
             } else if (url.endsWith("contents.do")) {
                 browse(url)
-                true
+                return true
             }
             else if (url.endsWith("index.do?")) {
                 binding.viewModel?.setSelectTab(EnumApp.MainPage.HOME)
-              true
+              return true
             }
             else if (url.indexOf("rtsp://") >= 0 || url.indexOf(".mp4") >= 0) {
                 val prefs = PreferenceManager.getDefaultSharedPreferences(this@MainActivity)
@@ -581,12 +581,8 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                     e.printStackTrace()
                 }
                 return true
-            } else {
-                if ( url == "https://lib.gwanak.go.kr/galib/program/parcelMemberApply.do") {
-                    return false
-                } else {
-                    view.loadUrl(url)
-                }
+            }  else {
+                view.loadUrl(url)
             }
             return false
         }

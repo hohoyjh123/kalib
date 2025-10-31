@@ -316,7 +316,7 @@ class LoginActivity: BaseAppBarActivity<ActivityLoginBinding>(R.layout.activity_
                     this.text = this.context.getString(R.string.expulsion_of_member)
                 } else if ("1" != userClass && "2" != userClass && "0" == memberClass && !item.illAplStopDate.isNullOrEmpty()) {
                     this.text = this.context.getString(R.string.interlibrary_loan_suspension)
-                } else if ("1" != userClass && "2" != userClass && "0" == memberClass && item.uLibraryEndDate.isNullOrEmpty()) {
+                } else if ("1" != userClass && "2" != userClass && "0" == memberClass && !item.uLibraryEndDate.isNullOrEmpty()) {
                     this.text = this.context.getString(R.string.u_library_suspension)
                 } else if ("1" != userClass && "2" != userClass && "0" == memberClass) {
                     this.text = this.context.getString(R.string.loan_available)
