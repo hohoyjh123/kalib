@@ -16,6 +16,7 @@ import com.yesjnet.gwanak.data.model.DeviceInfo
 import com.yesjnet.gwanak.data.model.Family
 import com.yesjnet.gwanak.data.model.MemberInfo
 import com.yesjnet.gwanak.data.model.PushData
+import com.yesjnet.gwanak.data.model.PushInfo
 import com.yesjnet.gwanak.data.model.eventbus.EBFinish
 import com.yesjnet.gwanak.data.model.eventbus.EBLogout
 import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
@@ -29,6 +30,10 @@ import com.yesjnet.gwanak.extension.browse
 import com.yesjnet.gwanak.storage.SecurePreference
 import com.yesjnet.gwanak.ui.base.BaseViewModel
 import com.yesjnet.gwanak.util.PermissionUtil
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import java.net.URLEncoder
 
@@ -293,7 +298,9 @@ class LoginViewModel(
                     appInfo.setLoginInfo(id, pwd)
                     updateMemberInfo(resource.resBase)
                     EventBus.getDefault().post(EBMemberInfo(resource.resBase))
-                    postPushKey(id, resource.resBase.recKey.toString())
+                    pref.setConfigBool(ConstsData.PrefCode.AUTO_LOGIN, true)
+                    postPushKeyInfo(resource.resBase)
+//                    postPushKey(id, resource.resBase.recKey.toString())
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         PermissionUtil.requestNotifications {
@@ -342,6 +349,34 @@ class LoginViewModel(
                     }
                     logout()
                 }
+            }
+
+            override fun onError(errorResource: ErrorResource) {
+                inErrorResource.value = errorResource
+            }
+
+        })
+        call.enqueue(response)
+    }
+
+    /**
+     * 회원별 설정조회
+     */
+    fun postPushKeyInfo(memberInfo: MemberInfo) {
+        val params = mutableMapOf<String, String>().apply {
+            this[ConstsData.ReqParam.USER_ID] = memberInfo.userId
+        }
+        val call = etcRepo.postPushKeyInfo(params)
+        val response = Response.create(call, object : APIResult<PushInfo> {
+            override fun onLoading(isLoading: Boolean) {
+                inDataLoading.value = isLoading
+            }
+
+            override fun onSuccess(resource: APIResource<PushInfo>) {
+                Logger.d("resource = $resource")
+                pref.setConfigBool(ConstsData.PrefCode.PUSH_ALARM, EnumApp.FlagYN.booleanByStatus(resource.resBase.push1Yn))
+                pref.setConfigBool(ConstsData.PrefCode.RE_AGREE_ALARM, EnumApp.FlagYN.booleanByStatus(resource.resBase.push2Yn))
+                postPushKey(memberInfo.userId, memberInfo.recKey.toString())
             }
 
             override fun onError(errorResource: ErrorResource) {
