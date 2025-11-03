@@ -19,7 +19,7 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvContent"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="6dp"
             android:fontFamily="@font/noto_sans_kr_medium"
@@ -29,12 +29,14 @@
             android:textColor="@{textColor == 0 ? @color/color_111111 : textColor}"
             tools:text="@string/integrated_resource_search"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/clStatus"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clStatus"
-            android:layout_width="60dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:minWidth="60dp"
             android:layout_marginStart="6dp"
             android:paddingHorizontal="6dp"
             android:paddingVertical="4dp"
@@ -42,7 +44,8 @@
             cornerAll="@{16}"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvContent">
+            app:layout_constraintStart_toEndOf="@id/tvContent"
+            app:layout_constraintEnd_toEndOf="parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
