@@ -379,13 +379,26 @@ class AllMenuViewModel(
                     EventBus.getDefault().post(pushData)
                     EventBus.getDefault().post(EBFinish(true))
                 }
+                // 모바일회원증
+                EnumApp.WebType.MOBILE_MEMBERSHIP_CARD -> {
+                    val memberInfo = onMemberInfo.value
+                    if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
+                        inLoginError.value = GAApplication.app.getString(R.string.available_after_logging_in)
+                    } else {
+                        val memberClass = EnumApp.MemberClass.valueOfType(memberInfo.memberClass)
+                        if (EnumApp.MemberClass.ASSOCIATE_MEMBER == memberClass) {
+                            inShowMsgDialog.value =  GAApplication.app.getString(R.string.associate_member_error)
+                        } else {
+                            inNaviScreen.value = NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE))
+                        }
+                    }
+                }
                 EnumApp.WebType.MY_INFO,
                 EnumApp.WebType.BOOK_USAGE_HISTORY,
                 EnumApp.WebType.INTERLIBRARY_LOAN_REQUEST_HISTORY,
                 EnumApp.WebType.MY_BOOKS_OF_INTEREST,
                 EnumApp.WebType.MY_REQUEST_HISTORY,
                 EnumApp.WebType.REQUEST_FOR_DESIRED_BOOKS,
-                EnumApp.WebType.MOBILE_MEMBERSHIP_CARD,
                 EnumApp.WebType.EDIT_MEMBERSHIP_INFOMATION,
                 EnumApp.WebType.CHANGE_PASSWORD,
                 EnumApp.WebType.RE_AGREE_PERSONAL_INFOMATION -> {

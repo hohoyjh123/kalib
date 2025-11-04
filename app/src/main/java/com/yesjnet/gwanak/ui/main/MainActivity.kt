@@ -748,11 +748,11 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
                 if (memberInfo == null || memberInfo.userId.isNullOrEmpty()) {
                     loginErrorDialog()
                 } else {
-                    val memberClass = EnumApp.MemberClass.valueOfType(memberInfo.userClass)
-                    if (EnumApp.MemberClass.FULL_MEMBER == memberClass) {
-                        startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
-                    } else {
+                    val memberClass = EnumApp.MemberClass.valueOfType(memberInfo.memberClass)
+                    if (EnumApp.MemberClass.ASSOCIATE_MEMBER == memberClass) {
                         showAlertOK(message = getString(R.string.associate_member_error))
+                    } else {
+                        startScreen(NavScreen.Login(screenInfo = ScreenInfo(transType = EnumApp.TransitionType.SLIDE)))
                     }
                 }
             }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">관악구립도서관</string>
+    <string name="app_name">관악구통합도서관</string>
     <string name="noti_channel_id">ga_noti_channel_id</string>
     <string name="retry">재시도</string>
     <string name="ok">확인</string>
@@ -19,7 +19,7 @@
     <string name="login">로그인</string>
     <string name="logout">로그아웃</string>
     <string name="auto_login">자동로그인</string>
-    <string name="force_update_message">관악구립도서관 앱이 업데이트 되었습니다. 원활한 사용을위해 앱을 업데이트해주세요.</string>
+    <string name="force_update_message">관악구통합도서관 앱이 업데이트 되었습니다. 원활한 사용을위해 앱을 업데이트해주세요.</string>
     <string name="permission_notification">알림을 받으시려면\n우측 하단 [설정] 버튼을 누른 후,\n알림설정 권한을 허용해주세요!</string>
     <string name="permission_location">위치 정보 제공을 받으시려면\n우측 하단 [설정] 버튼을 누른 후,\n위치 권한을 허용해주세요!</string>
     <string name="intro_title">관악문화재단</string>
@@ -68,7 +68,7 @@
 
     <!-- 회원정보인증 -->
     <string name="login_title">회원인증</string>
-    <string name="login_desc_1">관악구립도서관 로그인 페이지 입니다.</string>
+    <string name="login_desc_1">관악구통합도서관 로그인 페이지 입니다.</string>
     <string name="login_caption_1">로그인 하시면 홈페이지 서비스 및 대출연장/예약신청 등의 도서관 서비스를 이용하실 수 있습니다.</string>
     <string name="login_caption_2">로그인 정보가 기억나지 않는 경우 아이디 찾기 또는 비밀번호 재설정을 통해 확인하실 수 있습니다.</string>
     <string name="id_input_hint">아이디 입력</string>
@@ -110,7 +110,7 @@
     <string name="biometric_auth_msg">지문 또는 얼굴로 로그인 하세요</string>
     <string name="biometric_cancel_msg">생체인증을 취소하여 메인이로 이동합니다</string>
     <string name="biometric_count_error_msg">5회 인증 실패하여 메인으로 이동합니다</string>
-    <string name="associate_member_error">준회원은 메뉴접근 불가</string>
+    <string name="associate_member_error">도서관 대출회원 ( 정회원 ) 만 이용이 가능합니다.</string>
     <string name="loan_suspension">대출정지</string>
     <string name="expulsion_of_member">제적회원</string>
     <string name="interlibrary_loan_suspension">상호대차정지</string>

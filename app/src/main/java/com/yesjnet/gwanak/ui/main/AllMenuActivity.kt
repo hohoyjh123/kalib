@@ -45,6 +45,9 @@ class AllMenuActivity: BaseAppBarActivity<ActivityAllMenuBinding>(R.layout.activ
             onNavScreen.observe(this@AllMenuActivity) {
                 startScreen(it)
             }
+            onShowMsgDialog.observe(this@AllMenuActivity) {
+                showAlertOK(message = it)
+            }
             onFinish.observe(this@AllMenuActivity) {
                 finish()
             }
