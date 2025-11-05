@@ -1,6 +1,5 @@
 package com.yesjnet.gwanak.ui.main
 
-import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -14,18 +13,15 @@ import android.hardware.SensorManager
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.preference.PreferenceManager
 import android.view.View
 import android.webkit.GeolocationPermissions
 import android.webkit.JsResult
-import android.webkit.URLUtil
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
-import android.widget.Toast
 import androidx.core.net.toUri
 import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
@@ -39,6 +35,7 @@ import com.yesjnet.gwanak.data.model.eventbus.EBMemberInfo
 import com.yesjnet.gwanak.databinding.ActivityMainBinding
 import com.yesjnet.gwanak.extension.OnSingleClickListener
 import com.yesjnet.gwanak.extension.browse
+import com.yesjnet.gwanak.extension.setupDownloadListener
 import com.yesjnet.gwanak.extension.showAlertConfirm
 import com.yesjnet.gwanak.extension.showAlertOK
 import com.yesjnet.gwanak.fcm.LocalNotificationManager
@@ -442,59 +439,61 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
 //                Toast.makeText(this, "다운로드 실패: ${e.message}", Toast.LENGTH_LONG).show()
 //            }
 //        }
-        binding.wv.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
-            try {
-                var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
 
-                // filename*=UTF-8'' 형식 또는 filename="..." 형식에서 직접 추출
-                contentDisposition?.let {
-                    val filenameRegex = Regex("filename\\*?=([^;]+)")
-                    val match = filenameRegex.find(it)
-                    if (match != null) {
-                        val rawFileName = match.groupValues[1]
-                            .replace("UTF-8''", "")
-                            .replace("\"", "")
-                            .trim()
-                        // URL 디코딩 적용 (한글 처리)
-                        fileName = URLDecoder.decode(rawFileName, "UTF-8")
-                    }
-                }
-
-                val request = DownloadManager.Request(Uri.parse(url)).apply {
-                    setMimeType(mimeType)
-                    addRequestHeader("User-Agent", userAgent)
-
-                    val cookieManager = android.webkit.CookieManager.getInstance()
-                    cookieManager.flush()
-                    val cookies = cookieManager.getCookie(url)
-                    if (cookies != null) addRequestHeader("Cookie", cookies)
-
-                    setTitle(fileName)
-                    setDescription("파일 다운로드 중...")
-                    setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-                    Logger.d("Download URL: $url")
-                    Logger.d("Disposition: $contentDisposition")
-                    Logger.d("MimeType: $mimeType")
-                    Logger.d("FileName: $fileName")
-
-                    // 안전한 경로
-                    setDestinationInExternalFilesDir(
-                        this@MainActivity,
-                        Environment.DIRECTORY_DOWNLOADS,
-                        fileName
-                    )
-                }
-
-                val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-                dm.enqueue(request)
-                Toast.makeText(this, "다운로드를 시작합니다.", Toast.LENGTH_SHORT).show()
-            } catch (e: Exception) {
-                e.printStackTrace()
-                Toast.makeText(this, "다운로드 실패: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-        }
-
+//        binding.wv.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+//            try {
+//                var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
+//
+//                // filename*=UTF-8'' 형식 또는 filename="..." 형식에서 직접 추출
+//                contentDisposition?.let {
+//                    val filenameRegex = Regex("filename\\*?=([^;]+)")
+//                    val match = filenameRegex.find(it)
+//                    if (match != null) {
+//                        val rawFileName = match.groupValues[1]
+//                            .replace("UTF-8''", "")
+//                            .replace("\"", "")
+//                            .trim()
+//                        // URL 디코딩 적용 (한글 처리)
+//                        fileName = URLDecoder.decode(rawFileName, "UTF-8")
+//                    }
+//                }
+//
+//                val request = DownloadManager.Request(Uri.parse(url)).apply {
+//                    setMimeType(mimeType)
+//                    addRequestHeader("User-Agent", userAgent)
+//
+//                    val cookieManager = android.webkit.CookieManager.getInstance()
+//                    cookieManager.flush()
+//                    val cookies = cookieManager.getCookie(url)
+//                    if (cookies != null) addRequestHeader("Cookie", cookies)
+//
+//                    setTitle(fileName)
+//                    setDescription("파일 다운로드 중...")
+//                    setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+//
+//                    Logger.d("Download URL: $url")
+//                    Logger.d("Disposition: $contentDisposition")
+//                    Logger.d("MimeType: $mimeType")
+//                    Logger.d("FileName: $fileName")
+//
+//                    // 안전한 경로
+//                    setDestinationInExternalFilesDir(
+//                        this@MainActivity,
+//                        Environment.DIRECTORY_DOWNLOADS,
+//                        fileName
+//                    )
+//                }
+//
+//                val dm = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+//                dm.enqueue(request)
+//                Toast.makeText(this, "다운로드를 시작합니다.", Toast.LENGTH_SHORT).show()
+//            } catch (e: Exception) {
+//                e.printStackTrace()
+//                Toast.makeText(this, "다운로드 실패: ${e.message}", Toast.LENGTH_LONG).show()
+//            }
+//        }
+        
+        binding.wv.setupDownloadListener(this)
     }
 
 

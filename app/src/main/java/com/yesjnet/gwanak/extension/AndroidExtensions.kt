@@ -3,12 +3,15 @@ package com.yesjnet.gwanak.extension
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
+import android.app.DownloadManager
 import android.content.ActivityNotFoundException
+import android.content.BroadcastReceiver
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -16,6 +19,7 @@ import android.graphics.ImageDecoder
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Build
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
@@ -32,6 +36,9 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.webkit.CookieManager
+import android.webkit.URLUtil
+import android.webkit.WebView
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -39,16 +46,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.snackbar.Snackbar
+import com.orhanobut.logger.Logger
 import com.yesjnet.gwanak.R
 import com.yesjnet.gwanak.ui.base.BaseActivity
 import com.yesjnet.gwanak.ui.base.BaseDialogFragment
 import com.yesjnet.gwanak.ui.base.BaseFragment
 import com.yesjnet.gwanak.ui.dialog.CustomDialog
+import com.yesjnet.gwanak.util.FileDownloadHelper.correctMimeType
+import java.io.File
+import java.net.URLDecoder
 import java.util.*
 import java.util.regex.Pattern
 import kotlin.math.abs
@@ -712,4 +724,104 @@ fun Context.copyClipboard(label: String, copyStr: String) {
     val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
     // When setting the clipboard text.
     clipboardManager.setPrimaryClip(ClipData.newPlainText(label, copyStr))
+}
+
+fun WebView.setupDownloadListener(context: Context) {
+    var downloadId: Long = -1L
+    val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+    this.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+        try {
+            // ✅ 파일명 파싱
+            var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
+            contentDisposition?.let {
+                val regex = Regex("filename\\*?=([^;]+)")
+                val match = regex.find(it)
+                if (match != null) {
+                    val raw = match.groupValues[1]
+                        .replace("UTF-8''", "")
+                        .replace("\"", "")
+                        .trim()
+                    fileName = URLDecoder.decode(raw, "UTF-8")
+                }
+            }
+
+            // ✅ 저장 경로: 앱 전용 다운로드 디렉토리
+            val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+            if (file.exists()) file.delete()
+
+            // mime 타입 교정
+            val correctedMimeType = correctMimeType(fileName, mimeType)
+
+            val request = DownloadManager.Request(Uri.parse(url)).apply {
+                setTitle(fileName)
+                setDescription("파일 다운로드 중...")
+                setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+//                setMimeType(mimeType.ifEmpty { "application/octet-stream" })
+                setMimeType(correctedMimeType)
+                val cookie = CookieManager.getInstance().getCookie(url)
+                if (cookie != null) addRequestHeader("Cookie", cookie)
+                addRequestHeader("User-Agent", userAgent)
+                setDestinationUri(Uri.fromFile(file))
+            }
+
+            downloadId = downloadManager.enqueue(request)
+            Toast.makeText(context, "다운로드를 시작합니다.", Toast.LENGTH_SHORT).show()
+
+            Logger.d("Download URL: $url")
+            Logger.d("Disposition: $contentDisposition")
+            Logger.d("MimeType: $mimeType")
+            Logger.d("FileName: $fileName")
+
+            // ✅ 다운로드 완료 후 파일 열기 브로드캐스트 등록
+            val receiver = object : BroadcastReceiver() {
+                override fun onReceive(c: Context?, intent: Intent?) {
+                    val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
+                    if (id == downloadId) {
+                        val mime = mimeType.ifEmpty {
+                            // MIME 미확인시 확장자 기반 보정
+                            when {
+                                fileName.endsWith(".xlsx", true) -> "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                                fileName.endsWith(".xls", true) -> "application/vnd.ms-excel"
+                                fileName.endsWith(".txt", true) -> "text/plain"
+                                else -> "application/octet-stream"
+                            }
+                        }
+
+                        // ✅ FileProvider URI로 변환
+                        val uri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.provider",
+                            file
+                        )
+
+                        val openIntent = Intent(Intent.ACTION_VIEW).apply {
+                            setDataAndType(uri, mime)
+                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        }
+
+                        try {
+                            context.startActivity(openIntent)
+                        } catch (e: Exception) {
+                            Toast.makeText(context, "파일을 열 수 있는 앱이 없습니다.", Toast.LENGTH_SHORT).show()
+                        }
+
+                        // 리시버 해제
+                        context.unregisterReceiver(this)
+                    }
+                }
+            }
+
+            ContextCompat.registerReceiver(
+                context,
+                receiver,
+                IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(context, "다운로드 실패: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
 }
