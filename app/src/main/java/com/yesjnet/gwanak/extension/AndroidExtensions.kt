@@ -730,9 +730,8 @@ fun WebView.setupDownloadListener(context: Context) {
     var downloadId: Long = -1L
     val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
 
-    this.setDownloadListener { url, userAgent, contentDisposition, mimeType, contentLength ->
+    this.setDownloadListener { url, userAgent, contentDisposition, mimeType, _ ->
         try {
-            // ✅ 파일명 파싱
             var fileName = URLUtil.guessFileName(url, contentDisposition, mimeType)
             contentDisposition?.let {
                 val regex = Regex("filename\\*?=([^;]+)")
@@ -746,67 +745,47 @@ fun WebView.setupDownloadListener(context: Context) {
                 }
             }
 
-            // ✅ 저장 경로: 앱 전용 다운로드 디렉토리
-            val file = File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName)
+            // ✅ [변경] 저장 경로 → 공용 다운로드 폴더
+            val downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val file = File(downloadsDir, fileName)
             if (file.exists()) file.delete()
 
-            // mime 타입 교정
             val correctedMimeType = correctMimeType(fileName, mimeType)
 
             val request = DownloadManager.Request(Uri.parse(url)).apply {
                 setTitle(fileName)
                 setDescription("파일 다운로드 중...")
                 setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-//                setMimeType(mimeType.ifEmpty { "application/octet-stream" })
                 setMimeType(correctedMimeType)
                 val cookie = CookieManager.getInstance().getCookie(url)
                 if (cookie != null) addRequestHeader("Cookie", cookie)
                 addRequestHeader("User-Agent", userAgent)
-                setDestinationUri(Uri.fromFile(file))
+
+                // ✅ [변경] 공용 다운로드 디렉토리로 저장
+                setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
+                allowScanningByMediaScanner()
             }
 
             downloadId = downloadManager.enqueue(request)
             Toast.makeText(context, "다운로드를 시작합니다.", Toast.LENGTH_SHORT).show()
 
-            Logger.d("Download URL: $url")
-            Logger.d("Disposition: $contentDisposition")
-            Logger.d("MimeType: $mimeType")
-            Logger.d("FileName: $fileName")
-
-            // ✅ 다운로드 완료 후 파일 열기 브로드캐스트 등록
+            // ✅ 다운로드 완료 후 열기
             val receiver = object : BroadcastReceiver() {
                 override fun onReceive(c: Context?, intent: Intent?) {
                     val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
                     if (id == downloadId) {
-                        val mime = mimeType.ifEmpty {
-                            // MIME 미확인시 확장자 기반 보정
-                            when {
-                                fileName.endsWith(".xlsx", true) -> "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                                fileName.endsWith(".xls", true) -> "application/vnd.ms-excel"
-                                fileName.endsWith(".txt", true) -> "text/plain"
-                                else -> "application/octet-stream"
+                        val uri = downloadManager.getUriForDownloadedFile(downloadId)
+                        if (uri != null) {
+                            val openIntent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(uri, correctedMimeType)
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            try {
+                                context.startActivity(openIntent)
+                            } catch (e: Exception) {
+                                Toast.makeText(context, "파일을 열 수 있는 앱이 없습니다.", Toast.LENGTH_SHORT).show()
                             }
                         }
-
-                        // ✅ FileProvider URI로 변환
-                        val uri = FileProvider.getUriForFile(
-                            context,
-                            "${context.packageName}.provider",
-                            file
-                        )
-
-                        val openIntent = Intent(Intent.ACTION_VIEW).apply {
-                            setDataAndType(uri, mime)
-                            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                        }
-
-                        try {
-                            context.startActivity(openIntent)
-                        } catch (e: Exception) {
-                            Toast.makeText(context, "파일을 열 수 있는 앱이 없습니다.", Toast.LENGTH_SHORT).show()
-                        }
-
-                        // 리시버 해제
                         context.unregisterReceiver(this)
                     }
                 }
