@@ -182,9 +182,9 @@ class MainActivity: BaseAppBarActivity<ActivityMainBinding>(R.layout.activity_ma
     }
 
     override fun onBackPressed() {
-//        if (!checkBack()) {
+        if (!checkBack()) {
             exitDialog()
-//        }
+        }
     }
 
     override fun onSensorChanged(event: SensorEvent) {
