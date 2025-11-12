@@ -24,6 +24,7 @@
     <string name="permission_location">위치 정보 제공을 받으시려면\n우측 하단 [설정] 버튼을 누른 후,\n위치 권한을 허용해주세요!</string>
     <string name="intro_title">관악문화재단</string>
     <string name="intro_desc">관악구통합도서관</string>
+    <string name="intro_copy_right">Copyright(c) 관악구통합도서관\nAll Right Reserved.</string>
 
     <!-- 전체 메뉴 -->
     <string name="login_before_message">로그인이 필요한 서비스 입니다.</string>
