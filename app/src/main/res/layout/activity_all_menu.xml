@@ -405,7 +405,7 @@
                     android:layout_height="40dp"
                     android:onClick="@{() -> viewModel.onClickMenu(EnumApp.WebType.DELIVERY_REQUEST_DETAILS)}"
                     app:value="@{@string/delivery_request_details}"
-                    app:menuDrawable="@{@drawable/icon_menu_f05}"
+                    app:menuDrawable="@{@drawable/icon_menu_c03}"
                     app:layout_constraintTop_toBottomOf="@+id/icMyRequestHistory"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/vDataSearch"/>
