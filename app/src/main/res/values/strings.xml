@@ -57,6 +57,7 @@
     <string name="my_books_of_interest">나의관심도서</string>
     <string name="my_request_history">나의신청내역</string>
     <string name="request_for_desired_books">희망도서신청내역</string>
+    <string name="delivery_request_details">맘대로택배신청내역</string>
 
     <string name="membership_information">회원정보</string>
     <string name="mobile_membership_card">모바일회원증</string>

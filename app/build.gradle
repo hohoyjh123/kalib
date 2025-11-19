@@ -48,8 +48,8 @@ android {
         }
         debug {
             debuggable true
-//            buildConfigField "String", "SERVER_HOST", '"https://gwangjinlib.yesjnet.com"'
             buildConfigField "String", "SERVER_HOST", '"https://gwanakmobile.yesjnet.com"'
+//            buildConfigField "String", "SERVER_HOST", '"http://210.104.141.20:8080"'
             signingConfig signingConfigs.debug
         }
     }

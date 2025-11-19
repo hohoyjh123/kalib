@@ -157,6 +157,7 @@ class EnumApp {
         MY_BOOKS_OF_INTEREST("/mobile/basket/mypage/basketList.do"), // 전체메뉴 > 나의관심도서
         MY_REQUEST_HISTORY("/mobile/lecture/mypage/lectureApplyList.do"), // 전체메뉴 > 나의신청내역
         REQUEST_FOR_DESIRED_BOOKS("/mobile/hopebook/mypage/hopeBookList.do"), // 전체메뉴 > 희망도서신청내역
+        DELIVERY_REQUEST_DETAILS("/mobile/parcel/mypage/parcelBookApplyList.do"), // 전체메뉴 > 맘대로택배신청내역
         LOGIN(""), // 전체메뉴 > 로그인
         MOBILE_MEMBERSHIP_CARD(""), // 전체메뉴 > 모바일회원증
         EDIT_MEMBERSHIP_INFOMATION("/mobile/member/memberModifyCheck.do"), // 전체메뉴 > 회원정보수정

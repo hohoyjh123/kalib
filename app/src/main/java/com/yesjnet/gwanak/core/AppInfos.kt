@@ -24,7 +24,7 @@ import java.util.Locale
 class AppInfo(private val application: GAApplication, private val mSecPref: SecurePreference) {
 
     val appName: String by lazy {
-        "kjlib"
+        "galib"
     }
 
     val versionCode: Int by lazy {

@@ -398,13 +398,32 @@
                     app:layout_constraintTop_toTopOf="@id/icMyRequestHistory"
                     app:layout_constraintStart_toEndOf="@id/icMyRequestHistory"
                     app:layout_constraintEnd_toEndOf="parent"/>
+                <include
+                    android:id="@+id/icDeliveryRequestDetails"
+                    layout="@layout/layout_all_menu"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:onClick="@{() -> viewModel.onClickMenu(EnumApp.WebType.DELIVERY_REQUEST_DETAILS)}"
+                    app:value="@{@string/delivery_request_details}"
+                    app:menuDrawable="@{@drawable/icon_menu_f05}"
+                    app:layout_constraintTop_toBottomOf="@+id/icMyRequestHistory"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/vDataSearch"/>
+                <View
+                    android:id="@+id/vDeliveryRequestDetailsEmpty"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    app:layout_constraintTop_toTopOf="@id/icDeliveryRequestDetails"
+                    app:layout_constraintStart_toEndOf="@id/icDeliveryRequestDetails"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+
                 <View
                     android:id="@+id/vMyLibraryLine"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="16dp"
                     android:background="@color/color_dddddd"
-                    app:layout_constraintTop_toBottomOf="@id/icMyRequestHistory"/>
+                    app:layout_constraintTop_toBottomOf="@id/icDeliveryRequestDetails"/>
 
                 <!-- 회원정보 -->
                 <TextView
