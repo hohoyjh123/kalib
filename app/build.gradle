@@ -42,14 +42,22 @@ android {
         release {
             minifyEnabled true
             debuggable false
-            buildConfigField "String", "SERVER_HOST", '"https://lib.gwanak.go.kr/galib/index.do"'
+//            buildConfigField "String", "SERVER_HOST", '"https://lib.gwanak.go.kr/galib/index.do"'
+            buildConfigField "String", "SERVER_HOST", '"http://210.104.141.20:80"'
             signingConfig signingConfigs.release
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        releaseDebug {
+            minifyEnabled false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            buildConfigField "String", "SERVER_HOST", '"http://210.104.141.20:80"'
         }
         debug {
             debuggable true
             buildConfigField "String", "SERVER_HOST", '"https://gwanakmobile.yesjnet.com"'
-//            buildConfigField "String", "SERVER_HOST", '"http://210.104.141.20:8080"'
+//            buildConfigField "String", "SERVER_HOST", '"http://210.104.141.20:80"'
             signingConfig signingConfigs.debug
         }
     }
